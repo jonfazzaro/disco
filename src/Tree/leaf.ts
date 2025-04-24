@@ -8,7 +8,9 @@ export class Leaf {
 
     set status(value: string) {
         this._status = value;
-        if (!this.parent) return 
+        if (!this.parent) return
+        if (this.parent.children.every(c => c.status === 'new'))
+            this.parent.status = 'new';
         if (this.parent.children.some(c => c.status === 'doing')) 
             this.parent.status = 'doing';
         if (this.parent.children.every(c => c.status === 'done'))

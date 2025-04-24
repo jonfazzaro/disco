@@ -67,6 +67,17 @@ describe('The leaf', () => {
                     }); 
                 });
             });
+
+            describe('all back to new', () => {
+                beforeEach(() => {
+                    leaf.status = 'new'
+                    sibling.status = 'new'
+                });
+
+                it('sets the parent to new', () => {
+                    expect(parent.status).toEqual('new');
+                });
+            });
         });
     });
 });
