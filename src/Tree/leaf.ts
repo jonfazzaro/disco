@@ -9,18 +9,25 @@ export class Leaf {
 
     set status(value: Status) {
         this._status = value;
-        
-        if (this.status === Status.done) {
-            this.children.filter(c => c.status === Status.doing).forEach(c => c.status = Status.done);
-            this.children.filter(c => c.status === Status.new).forEach(c => c.status = Status.canceled);
-        }
+        this.inheritDone();
         this.parent?.propagateStatus();
     }
-    
+
     propagateStatus() {
         this.propagateIfAll([Status.new]);
         this.propagateIfSome(Status.doing);
-        this.propagateIfAll([Status.done, Status.canceled]); 
+        this.propagateIfAll([Status.done, Status.canceled]);
+    }
+
+    private inheritDone() {
+        if (this.status === Status.done) {
+            this.childrenIn(Status.doing).forEach(c => c.status = Status.done);
+            this.childrenIn(Status.new).forEach(c => c.status = Status.canceled);
+        }
+    }
+
+    private childrenIn(status: Status) {
+        return this.children.filter(c => c.status === status);
     }
 
     private propagateIfAll(statuses: Status[]) {
