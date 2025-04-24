@@ -5,10 +5,10 @@ describe('The leaf', () => {
     let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf;
 
     beforeEach(() => {
-        parent = new Leaf();
-        leaf = new Leaf(parent);
-        sibling = new Leaf(parent);
-        grandchild = new Leaf(leaf);
+        parent = new Leaf("Clean the house");
+        leaf = new Leaf("dishes",  parent);
+        sibling = new Leaf("do the laundry",  parent);
+        grandchild = new Leaf("separate delicates", leaf);
     });
 
     it('has a parent', () => {
@@ -21,6 +21,10 @@ describe('The leaf', () => {
 
     it('lists its children', () => {
         expect(parent.children[0]).toEqual(leaf);
+    });
+
+    it('lists its title and status', () => {
+        expect(`${leaf}`).toEqual("dishes (new)");
     });
 
     describe('when setting status', () => {
