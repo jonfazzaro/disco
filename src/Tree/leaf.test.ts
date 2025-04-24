@@ -1,4 +1,4 @@
-import {Leaf} from "./leaf.ts";
+import {Leaf, Status} from "./leaf.ts";
 import {expect} from "vitest";
 
 describe('The leaf', () => {
@@ -15,7 +15,7 @@ describe('The leaf', () => {
     });
 
     it('has a status', () => {
-        expect(leaf.status).toEqual('new')
+        expect(leaf.status).toEqual(Status.new)
     });
 
     it('lists its children', () => {
@@ -25,88 +25,88 @@ describe('The leaf', () => {
     describe('when setting status', () => {
         describe('to doing', () => {
             beforeEach(() => {
-                leaf.status = 'doing';
+                leaf.status = Status.doing;
             });
                 
             it('sets the status', () => {
-                expect(leaf.status).toEqual('doing');
+                expect(leaf.status).toEqual(Status.doing);
             });
 
             it("sets the parent's status", () => {
-                expect(parent.status).toEqual('doing');
+                expect(parent.status).toEqual(Status.doing);
             });
         });
 
         describe('to done', () => {
             beforeEach(() => {
-                leaf.status = 'doing';
-                leaf.status = 'done';
+                leaf.status = Status.doing;
+                leaf.status = Status.done;
             });
 
             it("does not change the parent's status", () => {
-                expect(parent.status).toEqual('doing');
+                expect(parent.status).toEqual(Status.doing);
             });
 
             describe('when the sibling is done', () => {
                 beforeEach(() => {
-                    sibling.status = 'doing'
-                    sibling.status = 'done'
+                    sibling.status = Status.doing
+                    sibling.status = Status.done
                 });
                 
                 it('sets the parent to done', () => {
-                    expect(parent.status).toEqual('done');
+                    expect(parent.status).toEqual(Status.done);
                 });
 
                 describe('then back to doing', () => {
                     beforeEach(() => {
-                        sibling.status = 'doing'
+                        sibling.status = Status.doing
                     });
 
                     it('sets the parent to doing', () => {
-                        expect(parent.status).toEqual('doing');
+                        expect(parent.status).toEqual(Status.doing);
                     }); 
                 });
             });
 
             describe('all back to new', () => {
                 beforeEach(() => {
-                    leaf.status = 'new'
-                    sibling.status = 'new'
+                    leaf.status = Status.new
+                    sibling.status = Status.new
                 });
 
                 it('sets the parent to new', () => {
-                    expect(parent.status).toEqual('new');
+                    expect(parent.status).toEqual(Status.new);
                 });
             });
         });
 
         describe('to canceled', () => {
             beforeEach(() => {
-                leaf.status = 'doing'
-                leaf.status = 'canceled'
+                leaf.status = Status.doing
+                leaf.status = Status.canceled
             });
             
             it('sets the parent to new', () => {
-                expect(parent.status).toEqual('new');
+                expect(parent.status).toEqual(Status.new);
             });
 
             describe('when a sibling is doing', () => {
                 beforeEach(() => {
-                    sibling.status = 'doing'
+                    sibling.status = Status.doing
                 });
 
                 it('sets the parent to doing', () => {
-                    expect(parent.status).toEqual('doing');
+                    expect(parent.status).toEqual(Status.doing);
                 }); 
             });
 
             describe('when siblings are done', () => {
                 beforeEach(() => {
-                    sibling.status = 'done'
+                    sibling.status = Status.done
                 });
 
                 it('sets the parent to done', () => {
-                    expect(parent.status).toEqual('done');
+                    expect(parent.status).toEqual(Status.done);
                 });
             });
         });
