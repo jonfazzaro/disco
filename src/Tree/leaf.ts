@@ -1,8 +1,14 @@
 export class Leaf {
 
-    private _status: Status = Status.new;
     children: Leaf[] = []
+    parent: Leaf | null = null;
 
+    constructor(parent: Leaf | null = null) {
+        this.parent = parent
+        this.parent?.children?.push(this);
+    }
+
+    private _status: Status = Status.new;
     get status(): Status {
         return this._status;
     }
@@ -38,10 +44,6 @@ export class Leaf {
     private propagateIfSome(status: Status) {
         if (this.children.some(c => c.status === status))
             this.status = status;
-    }
-
-    constructor(public parent: Leaf | null = null) {
-        parent?.children?.push(this);
     }
 
 }
