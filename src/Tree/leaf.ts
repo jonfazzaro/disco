@@ -13,7 +13,7 @@ export class Leaf {
             this.parent.status = 'new';
         if (this.parent.children.some(c => c.status === 'doing')) 
             this.parent.status = 'doing';
-        if (this.parent.children.every(c => c.status === 'done'))
+        if (this.parent.children.every(c => ['done', 'canceled'].includes(c.status)))
             this.parent.status = 'done';
     }
 

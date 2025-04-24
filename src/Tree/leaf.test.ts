@@ -88,7 +88,27 @@ describe('The leaf', () => {
             
             it('sets the parent to new', () => {
                 expect(parent.status).toEqual('new');
-            }); 
+            });
+
+            describe('when a sibling is doing', () => {
+                beforeEach(() => {
+                    sibling.status = 'doing'
+                });
+
+                it('sets the parent to doing', () => {
+                    expect(parent.status).toEqual('doing');
+                }); 
+            });
+
+            describe('when siblings are done', () => {
+                beforeEach(() => {
+                    sibling.status = 'done'
+                });
+
+                it('sets the parent to done', () => {
+                    expect(parent.status).toEqual('done');
+                });
+            });
         });
     });
 });
