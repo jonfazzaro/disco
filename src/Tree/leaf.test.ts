@@ -40,6 +40,7 @@ describe('The leaf', () => {
 
         describe('to done', () => {
             beforeEach(() => {
+                sibling.status = Status.new;
                 leaf.status = Status.doing;
                 leaf.status = Status.done;
             });
@@ -87,8 +88,8 @@ describe('The leaf', () => {
                 leaf.status = Status.canceled
             });
 
-            it('sets the parent to new', () => {
-                expect(parent.status).toEqual(Status.new);
+            it("does not change the parent's status", () => {
+                expect(parent.status).toEqual(Status.doing);
             });
 
             describe('when a sibling is doing', () => {
@@ -119,6 +120,25 @@ describe('The leaf', () => {
                 expect(parent.status).toEqual(Status.doing);
             });
 
+        });
+
+        describe('of the parent', () => {
+            describe('to done', () => {
+                beforeEach(() => {
+                    leaf.status = Status.doing;
+                    parent.status = Status.doing;
+                    parent.status = Status.done;
+                });
+
+                it('sets all the doing children to done', () => {
+                    expect(leaf.status).toEqual(Status.done);
+                });
+
+                it('sets all the new children to canceled', () => {
+                    expect(sibling.status).toEqual(Status.canceled);
+                });
+            });
+            
         });
     });
 });
