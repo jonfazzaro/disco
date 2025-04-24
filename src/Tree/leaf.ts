@@ -9,7 +9,7 @@ export class Leaf {
     set status(value: string) {
         this._status = value;
         if (!this.parent) return
-        if (this.parent.children.every(c => c.status === 'new'))
+        if (this.parent.children.every(c => ['new', 'canceled'].includes(c.status)))
             this.parent.status = 'new';
         if (this.parent.children.some(c => c.status === 'doing')) 
             this.parent.status = 'doing';

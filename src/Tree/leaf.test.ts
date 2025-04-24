@@ -43,7 +43,7 @@ describe('The leaf', () => {
                 leaf.status = 'done';
             });
 
-            it("does not set the parent's status", () => {
+            it("does not change the parent's status", () => {
                 expect(parent.status).toEqual('doing');
             });
 
@@ -78,6 +78,17 @@ describe('The leaf', () => {
                     expect(parent.status).toEqual('new');
                 });
             });
+        });
+
+        describe('to canceled', () => {
+            beforeEach(() => {
+                leaf.status = 'doing'
+                leaf.status = 'canceled'
+            });
+            
+            it('sets the parent to new', () => {
+                expect(parent.status).toEqual('new');
+            }); 
         });
     });
 });
