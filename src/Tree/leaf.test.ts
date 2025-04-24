@@ -2,12 +2,13 @@ import {Leaf, Status} from "./leaf.ts";
 import {expect} from "vitest";
 
 describe('The leaf', () => {
-    let leaf: Leaf, parent: Leaf, sibling: Leaf;
+    let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf;
 
     beforeEach(() => {
         parent = new Leaf();
         leaf = new Leaf(parent);
         sibling = new Leaf(parent);
+        grandchild = new Leaf(leaf);
     });
 
     it('has a parent', () => {
@@ -19,7 +20,7 @@ describe('The leaf', () => {
     });
 
     it('lists its children', () => {
-        expect(parent.children[0]).toEqual(leaf);   
+        expect(parent.children[0]).toEqual(leaf);
     });
 
     describe('when setting status', () => {
@@ -27,7 +28,7 @@ describe('The leaf', () => {
             beforeEach(() => {
                 leaf.status = Status.doing;
             });
-                
+
             it('sets the status', () => {
                 expect(leaf.status).toEqual(Status.doing);
             });
@@ -52,7 +53,7 @@ describe('The leaf', () => {
                     sibling.status = Status.doing
                     sibling.status = Status.done
                 });
-                
+
                 it('sets the parent to done', () => {
                     expect(parent.status).toEqual(Status.done);
                 });
@@ -64,7 +65,7 @@ describe('The leaf', () => {
 
                     it('sets the parent to doing', () => {
                         expect(parent.status).toEqual(Status.doing);
-                    }); 
+                    });
                 });
             });
 
@@ -85,7 +86,7 @@ describe('The leaf', () => {
                 leaf.status = Status.doing
                 leaf.status = Status.canceled
             });
-            
+
             it('sets the parent to new', () => {
                 expect(parent.status).toEqual(Status.new);
             });
@@ -97,7 +98,7 @@ describe('The leaf', () => {
 
                 it('sets the parent to doing', () => {
                     expect(parent.status).toEqual(Status.doing);
-                }); 
+                });
             });
 
             describe('when siblings are done', () => {
@@ -109,6 +110,15 @@ describe('The leaf', () => {
                     expect(parent.status).toEqual(Status.done);
                 });
             });
+        });
+
+        describe('of the grandchild', () => {
+            it('gets propagated all the way up', () => {
+                grandchild.status = Status.doing
+                expect(leaf.status).toEqual(Status.doing);
+                expect(parent.status).toEqual(Status.doing);
+            });
+
         });
     });
 });

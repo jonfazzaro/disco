@@ -9,13 +9,25 @@ export class Leaf {
 
     set status(value: Status) {
         this._status = value;
-        if (!this.parent) return
-        if (this.parent.children.every(c => [Status.new, Status.canceled].includes(c.status)))
-            this.parent.status = Status.new
-        if (this.parent.children.some(c => c.status === Status.doing))
-            this.parent.status = Status.doing;
-        if (this.parent.children.every(c => [Status.done, Status.canceled].includes(c.status)))
-            this.parent.status = Status.done;
+        this.parent?.inheritStatus();
+    }
+    
+    inheritStatus() {
+        if (this.children.length === 0) return;
+
+        this.inheritIfAll(Status.new);
+        this.inheritIfSome(Status.doing);
+        this.inheritIfAll(Status.done); 
+    }
+
+    private inheritIfAll(status: Status) {
+        if (this.children.every(c => [status, Status.canceled].includes(c.status)))
+            this.status = status
+    }
+
+    private inheritIfSome(status: Status) {
+        if (this.children.some(c => c.status === status))
+            this.status = status;
     }
 
     constructor(public parent: Leaf | null = null) {
