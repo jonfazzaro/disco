@@ -1,27 +1,35 @@
 import {IdGenerator, NullIdGenerator, RealIdGenerator} from "../IdGenerator.ts";
 
-export class Leaf {
+export interface CreateLeaf {
+    name: string
+    parent?: Leaf | null
+};
 
+export interface CreateNullLeaf extends CreateLeaf {
+    id: string
+};
+
+export class Leaf {
+    id: string;
     name: string;
     children: Leaf[] = []
     parent: Leaf | null = null;
-    id: string;
 
-    static create({name, parent = null} : {name: string, parent?: Leaf | null}) {
+    static create({name, parent = null}: CreateLeaf) {
         return new Leaf(name, parent)
     }
 
-    static createNull({name, parent = null, id} : {name: string, parent?: Leaf | null, id: string}) {
+    static createNull({name, parent = null, id}: CreateNullLeaf) {
         return new Leaf(name, parent, new NullIdGenerator(id))
     }
-    
+
     private constructor(name: string, parent: Leaf | null = null, idGenerator: IdGenerator = new RealIdGenerator()) {
         this.id = idGenerator.nextId();
         this.name = name;
         this.parent = parent
         this.parent?.children?.push(this);
     }
-    
+
     toString() {
         return `${this.name} (${this.status})`;
     }
