@@ -3,17 +3,6 @@ import {Leaf, Status} from "./Tree/leaf.ts";
 import {CustomNodeElementProps, RawNodeDatum, Tree} from "react-d3-tree";
 import {useCallback, useState} from "react";
 
-const useCenteredTree = () => {
-    const [translate, setTranslate] = useState({x: 0, y: 0});
-    const containerRef = useCallback((containerElem: HTMLDivElement | null) => {
-        if (containerElem !== null) {
-            const {width} = containerElem.getBoundingClientRect();
-            setTranslate({x: width / 2, y: 100});
-        }
-    }, []);
-    return [translate, containerRef] as const;
-};
-
 function App() {
     const [translate, containerRef] = useCenteredTree();
     const [leaves, setLeaves] = useState(testData())
@@ -48,6 +37,21 @@ function App() {
         setLeaves(l => ({...l}) as Leaf)
     }
 
+    function id(node: RawNodeDatum) {
+        return node.attributes?.id as string;
+    }
+
+    function addChild(nodeId: string) {
+        const leaf = findLeaf(nodeId, leaves)
+        if (!leaf) return
+        
+        Leaf.create({
+            name: `child of ${leaf.name}`,
+            parent: leaf
+        })
+        bind();
+    }
+
     return (
         <>
             <h3>🪩 Disco</h3>
@@ -61,24 +65,12 @@ function App() {
                       pathFunc={'step'}
                       renderCustomNodeElement={renderCard}
                       onNodeClick={e => {
-                          console.log(`clicked ${e.data.name}`)
-                          const leaf = findLeaf(id(e.data) , leaves)
-                          if (leaf) {
-                              Leaf.create({
-                                  name: `child of ${leaf.name}`,
-                                  parent: leaf
-                              })
-                              bind();
-                          }
+                          addChild(id(e.data));
                       }}
                 />
             </div>
         </>
     )
-    
-    function id(node: RawNodeDatum) {
-        return node.attributes?.id as string;
-    }
 
     function renderCard({nodeDatum, onNodeClick}: CustomNodeElementProps) {
         return <g className={`card ${nodeDatum.attributes?.status}`}>
@@ -102,6 +94,17 @@ function App() {
         </g>;
     }
 
+    function useCenteredTree() {
+        const [translate, setTranslate] = useState({x: 0, y: 0});
+        const containerRef = useCallback((containerElem: HTMLDivElement | null) => {
+            if (containerElem !== null) {
+                const {width} = containerElem.getBoundingClientRect();
+                setTranslate({x: width / 2, y: 100});
+            }
+        }, []);
+        return [translate, containerRef] as const;
+    }
+
     function testData() {
         const root = Leaf.create({name: 'root'});
         const left = Leaf.create({name: 'left', parent: root, status: Status.doing});
@@ -113,8 +116,6 @@ function App() {
 
         return root;
     }
-
-
 }
 
 export default App
