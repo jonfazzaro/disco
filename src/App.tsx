@@ -73,15 +73,17 @@ function App() {
     )
 
     function renderCard({nodeDatum, onNodeClick}: CustomNodeElementProps) {
-        return <g className={`card ${nodeDatum.attributes?.status}`}>
+        return <g className={`card ${nodeDatum.attributes?.status}`} onClick={onNodeClick}>
             <defs>
                 <filter id="shadow">
                     <feDropShadow dx="2" dy="2" stdDeviation="1" floodOpacity="0.3"/>
                 </filter>
             </defs>
-            <rect width="100" height="100" x="-50" y="-50"
+            <rect width="100" 
+                  height="100" 
+                  x="-50" 
+                  y="-50"
                   filter="url(#shadow)"
-                  onClick={onNodeClick}
             />
             <text
                 strokeWidth="0"
