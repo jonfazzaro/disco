@@ -23,7 +23,7 @@ describe('The leaf', () => {
         expect(parent.children[0]).toEqual(leaf);
     });
 
-    it('lists its title and status', () => {
+    it('lists its name and status', () => {
         expect(`${leaf}`).toEqual("dishes (new)");
     });
 

@@ -1,17 +1,17 @@
 export class Leaf {
 
-    title: string;
+    name: string;
     children: Leaf[] = []
     parent: Leaf | null = null;
 
-    constructor(title: string, parent: Leaf | null = null) {
-        this.title = title;
+    constructor(name: string, parent: Leaf | null = null) {
+        this.name = name;
         this.parent = parent
         this.parent?.children?.push(this);
     }
     
     toString() {
-        return `${this.title} (${this.status})`;
+        return `${this.name} (${this.status})`;
     }
 
     private _status: Status = Status.new;
