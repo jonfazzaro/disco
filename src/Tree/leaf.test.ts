@@ -5,18 +5,7 @@ describe('The leaf', () => {
     let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf;
 
     beforeEach(() => {
-        parent = Leaf.createNull({name: "Clean the house", id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"})
-        leaf = Leaf.createNull({name: "dishes", parent: parent, id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"});
-        sibling = Leaf.createNull({
-            name: "do the laundry",
-            parent: parent,
-            id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"
-        });
-        grandchild = Leaf.createNull({
-            name: "separate delicates",
-            parent: leaf,
-            id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"
-        });
+        arrangeLeaves();
     });
 
     it('has an ID', () => {
@@ -157,4 +146,19 @@ describe('The leaf', () => {
             
         });
     });
+
+    function arrangeLeaves() {
+        parent = Leaf.createNull({name: "Clean the house", id: "c9d6431d-6166-4ec3-9485-0db974753299"})
+        leaf = Leaf.createNull({name: "dishes", parent: parent, id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"});
+        sibling = Leaf.createNull({
+            name: "do the laundry",
+            parent: parent,
+            id: "6985e31c-2cd1-492d-be57-96a295869d8a"
+        });
+        grandchild = Leaf.createNull({
+            name: "separate delicates",
+            parent: leaf,
+            id: "ba3de1d3-3ab0-4934-aea4-3fcc719ef174"
+        });
+    }
 });
