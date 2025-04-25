@@ -12,8 +12,9 @@
   },
   "dependencies": {
     "react": "^19.0.0",
+    "react-d3-tree": "^3.6.6",
     "react-dom": "^19.0.0",
-    "react-d3-tree": "^3.6.6"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

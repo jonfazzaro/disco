@@ -4,12 +4,12 @@ import {RawNodeDatum, Tree} from "react-d3-tree";
 
 function App() {
 
-    const root = new Leaf('root');
-    const left = new Leaf('left', root);
-    const right = new Leaf('right', root);
-    const port = new Leaf('port', right);
-    const starboard = new Leaf('starboard', right);
-    const stern = new Leaf('stern', left);
+    const root = Leaf.create({name: 'root'});
+    const left = Leaf.create({name: 'left', parent: root});
+    const right = Leaf.create({name: 'right', parent: root});
+    const port = Leaf.create({name: 'port', parent: right});
+    const starboard = Leaf.create({name: 'starboard', parent: right});
+    const stern = Leaf.create({name: 'stern', parent: left});
 
     left.status = Status.doing;
     port.status = Status.canceled;

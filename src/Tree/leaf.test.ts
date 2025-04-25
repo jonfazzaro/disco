@@ -5,10 +5,22 @@ describe('The leaf', () => {
     let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf;
 
     beforeEach(() => {
-        parent = new Leaf("Clean the house");
-        leaf = new Leaf("dishes",  parent);
-        sibling = new Leaf("do the laundry",  parent);
-        grandchild = new Leaf("separate delicates", leaf);
+        parent = Leaf.createNull({name: "Clean the house", id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"})
+        leaf = Leaf.createNull({name: "dishes", parent: parent, id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"});
+        sibling = Leaf.createNull({
+            name: "do the laundry",
+            parent: parent,
+            id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"
+        });
+        grandchild = Leaf.createNull({
+            name: "separate delicates",
+            parent: leaf,
+            id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"
+        });
+    });
+
+    it('has an ID', () => {
+        expect(leaf.id).toEqual("2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e")
     });
 
     it('has a parent', () => {

@@ -1,13 +1,25 @@
+import {v4 as uuidv4} from 'uuid';
+
 export class Leaf {
 
     name: string;
     children: Leaf[] = []
     parent: Leaf | null = null;
+    id: string;
 
-    constructor(name: string, parent: Leaf | null = null) {
+    private constructor(name: string, parent: Leaf | null = null, idGenerator: IdGenerator = new RealIdGenerator()) {
+        this.id = idGenerator.nextId();
         this.name = name;
         this.parent = parent
         this.parent?.children?.push(this);
+    }
+
+    static create({name, parent = null} : {name: string, parent?: Leaf | null}) {
+        return new Leaf(name, parent)
+    }
+    
+    static createNull({name, parent = null, id} : {name: string, parent?: Leaf | null, id: string}) {
+        return new Leaf(name, parent, new NullIdGenerator(id))
     }
     
     toString() {
@@ -59,4 +71,21 @@ export enum Status {
     doing = 'doing',
     done = 'done',
     canceled = 'canceled'
+}
+
+interface IdGenerator {
+    nextId(): string
+}
+
+class NullIdGenerator implements IdGenerator {
+    constructor(private id: string) { }
+    nextId() {
+        return this.id;
+    }
+}
+
+class RealIdGenerator implements IdGenerator {
+    nextId() {
+        return uuidv4().toString();
+    }
 }
