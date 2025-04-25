@@ -3,30 +3,33 @@ import {IdGenerator, NullIdGenerator, RealIdGenerator} from "../IdGenerator.ts";
 export interface CreateLeaf {
     name: string
     parent?: Leaf | null
-};
+    status?: Status | undefined
+}
 
 export interface CreateNullLeaf extends CreateLeaf {
     id: string
-};
+}
 
 export class Leaf {
     id: string;
     name: string;
     children: Leaf[] = []
     parent: Leaf | null = null;
+    private _status: Status = Status.new;
 
-    static create({name, parent = null}: CreateLeaf) {
-        return new Leaf(name, parent)
+    static create({name, parent, status}: CreateLeaf) {
+        return new Leaf(name, parent, status)
     }
 
-    static createNull({name, parent = null, id}: CreateNullLeaf) {
-        return new Leaf(name, parent, new NullIdGenerator(id))
+    static createNull({name, parent, status, id}: CreateNullLeaf) {
+        return new Leaf(name, parent, status, new NullIdGenerator(id))
     }
 
-    private constructor(name: string, parent: Leaf | null = null, idGenerator: IdGenerator = new RealIdGenerator()) {
+    private constructor(name: string, parent: Leaf | null = null, status: Status | undefined, idGenerator: IdGenerator = new RealIdGenerator()) {
         this.id = idGenerator.nextId();
         this.name = name;
         this.parent = parent
+        this.status = status || Status.new;
         this.parent?.children?.push(this);
     }
 
@@ -34,7 +37,6 @@ export class Leaf {
         return `${this.name} (${this.status})`;
     }
 
-    private _status: Status = Status.new;
     get status(): Status {
         return this._status;
     }

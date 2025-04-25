@@ -2,7 +2,7 @@ import {Leaf, Status} from "./leaf.ts";
 import {expect} from "vitest";
 
 describe('The leaf', () => {
-    let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf;
+    let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf, cousin: Leaf;
 
     beforeEach(() => {
         arrangeLeaves();
@@ -18,6 +18,7 @@ describe('The leaf', () => {
 
     it('has a status', () => {
         expect(leaf.status).toEqual(Status.new)
+        expect(cousin.status).toEqual(Status.doing)
     });
 
     it('lists its children', () => {
@@ -160,5 +161,11 @@ describe('The leaf', () => {
             parent: leaf,
             id: "ba3de1d3-3ab0-4934-aea4-3fcc719ef174"
         });
+        cousin = Leaf.createNull({
+            name: "separate colors",
+            parent: leaf,
+            status: Status.doing,
+            id: "fa3de1d3-3ab0-4934-aea4-3fcc719ef174" 
+        })
     }
 });
