@@ -1,14 +1,14 @@
-import {Leaf, Status} from "./leaf.ts";
+import {Leaf} from "./leaf.ts";
 import {useTree} from "./useTree.ts";
 import {RawNodeDatum, Tree as ReactD3Tree} from "react-d3-tree";
 import {useCallback, useState} from "react";
 import './Tree.css'
 import {Card} from "./Card.tsx";
 
+
 export function Tree({root}: { root: Leaf }) {
     const [translate, containerRef] = useCenteredTree();
-    const {data, change} = useTree(root);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+    const {data, change, setSelectedId, selectedId} = useTree(root);
 
     return <div className="tree" ref={containerRef}>
         <ReactD3Tree data={data}

@@ -2,13 +2,21 @@ import {Leaf} from "./leaf.ts";
 import {useState} from "react";
 import {RawNodeDatum} from "react-d3-tree";
 import {deepClone} from "../deepClone.ts";
+import {useKeyPress} from "../useKeyPress.ts";
 
 export function useTree(root: Leaf) {
     const [tree, setTree] = useState(root)
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    useKeyPress('Escape', () => {
+        setSelectedId(null);
+    }); 
     
     return {
         data: toDatum(tree), 
-        change
+        change,
+        selectedId,
+        setSelectedId
     };
 
     function change(id: string, update: (leaf: Leaf) => void) {
