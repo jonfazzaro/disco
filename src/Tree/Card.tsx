@@ -14,12 +14,12 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
              onClick={onNodeClick}>
             <textarea className="name"
                       name="tree-leaf-name"
-                      value={truncateString(nodeDatum.name)}
+                      value={truncate(nodeDatum.name)}
                       onInput={onChangeName}
                       onKeyDown={blurOnEnter}
                       autoComplete="off"
                       rows={1}
-                      maxLength={40}
+                      maxLength={30}
             />{}
         </div>
     </foreignObject>
@@ -39,7 +39,7 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
             event.currentTarget.blur();
     }
 
-    function truncateString(str: string, maxLength: number = 40): string {
+    function truncate(str: string, maxLength: number = 30): string {
         return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
     }
 }
