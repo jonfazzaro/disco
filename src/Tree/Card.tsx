@@ -9,12 +9,6 @@ interface CardProps extends CustomNodeElementProps {
 }
 
 export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) {
-    function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
-        event.currentTarget.style.height = "auto";
-        event.currentTarget.style.height = event.currentTarget.scrollHeight + "px";
-        onChange(nodeDatum.attributes?.id as string, l => l.name = event.currentTarget.value);
-    }
-
     return <foreignObject width="102" height="102" x="-51" y="-51">
         <div className={`card ${nodeDatum.attributes?.status} ${isSelected ? 'selected' : ''}`}
              onClick={onNodeClick}>
@@ -29,6 +23,16 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
             />{}
         </div>
     </foreignObject>
+
+    function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
+        autoAdjustHeight(event);
+        onChange(nodeDatum.attributes?.id as string, l => l.name = event.currentTarget.value);
+    }
+
+    function autoAdjustHeight(event: React.FormEvent<HTMLTextAreaElement>) {
+        event.currentTarget.style.height = "auto";
+        event.currentTarget.style.height = event.currentTarget.scrollHeight + "px";
+    }
 
     function blurOnEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {
         if (event.key === 'Enter')
