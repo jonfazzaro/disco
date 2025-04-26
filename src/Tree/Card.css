@@ -1,7 +1,6 @@
 .card {
     color: #333;
-    width: 100px;
-    height: 100px;
+    width: 100px; height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,6 +18,8 @@
         overflow: hidden;
     }
 
+    .controls {
+    }
 
     &.new {
         background-color: #ffff86;
@@ -51,12 +52,5 @@
             border: 1px solid #555;
         }
     }
-}
 
-.card-controls {
-    position: absolute;
-    margin-top: -50px;
-    background-color: #fff;
-    width: 200px;
-    height: 50px;
 }

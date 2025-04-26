@@ -9,8 +9,7 @@ interface CardProps extends CustomNodeElementProps {
 }
 
 export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) {
-    return <foreignObject width="102" height="102" x="-51" y="-51">
-        {isSelected && <div className="card-controls">HE IS WORKING THE CONTROLS</div>}
+    return <foreignObject width="150" height="150" x="-51" y="-51">
         <div className={`card ${nodeDatum.attributes?.status} ${isSelected ? 'selected' : ''}`}
              onClick={onNodeClick}>
             <textarea className="name"
@@ -21,9 +20,19 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
                       autoComplete="off"
                       rows={1}
                       maxLength={30}
-            />{}
+            />
+            {isSelected && <div className="controls">
+                <button onClick={addChild}>➕</button>
+            </div>}
         </div>
     </foreignObject>
+
+    function addChild() {
+        onChange(nodeDatum?.attributes?.id as string, leaf => Leaf.create({
+            name: `child of ${nodeDatum.name}`,
+            parent: leaf
+        }));
+    }
 
     function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
         autoAdjustHeight(event);
