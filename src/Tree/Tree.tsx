@@ -8,6 +8,7 @@ import {Card} from "./Card.tsx";
 export function Tree({root}: { root: Leaf }) {
     const [translate, containerRef] = useCenteredTree();
     const {data, change} = useTree(root);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
 
     return <div className="tree" ref={containerRef}>
         <ReactD3Tree data={data}
@@ -17,15 +18,9 @@ export function Tree({root}: { root: Leaf }) {
                      translate={translate}
                      initialDepth={100}
                      pathFunc={'step'}
-                     renderCustomNodeElement={e => <Card {...e} />}
+                     renderCustomNodeElement={e => <Card {...e} isSelected={selectedId === id(e.nodeDatum)} />}
                      onNodeClick={e => {
-                         change(id(e.data), leaf => {
-                             leaf.status = Status.done
-                             // Leaf.create({
-                             //     name: `child of ${leaf.name}`,
-                             //     parent: leaf
-                             // }) 
-                         })
+                         setSelectedId(id(e.data))
                      }}
         />
     </div>

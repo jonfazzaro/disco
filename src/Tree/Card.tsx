@@ -1,8 +1,13 @@
 import {CustomNodeElementProps} from "react-d3-tree";
 
-export function Card({nodeDatum, onNodeClick}: CustomNodeElementProps) {
+interface CardProps extends CustomNodeElementProps {
+    isSelected: boolean;
+}
+
+export function Card({nodeDatum, onNodeClick, isSelected}: CardProps) {
     return <foreignObject width="105" height="105" x="-50" y="-50">
         <div className={`card ${nodeDatum.attributes?.status}`} onClick={onNodeClick}>
+            {isSelected && <h3>Selected!</h3>}
             <div className="name">{truncateString(nodeDatum.name)}</div>
         </div>
     </foreignObject>
