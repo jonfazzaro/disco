@@ -1,0 +1,33 @@
+.card {
+    text {
+        fill: #333;
+    }
+
+    &.new {
+        rect {
+            fill: #ffff86;
+            stroke: #7a7a40;
+        }
+    }
+
+    &.doing {
+        rect {
+            fill: #b8d7fa;
+            stroke: #17455d;
+        }
+    }
+
+    &.done {
+        rect {
+            fill: #b0f399;
+            stroke: #3f6c1c;
+        }
+    }
+
+    &.canceled {
+        rect {
+            fill: #ddd;
+            stroke: #555;
+        }
+    }
+}

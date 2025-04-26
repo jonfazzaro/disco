@@ -1,103 +1,12 @@
 import {Leaf, Status} from "./Tree/leaf.ts";
-import {CustomNodeElementProps, RawNodeDatum, Tree} from "react-d3-tree";
-import {useCallback, useState} from "react";
+import {Tree} from "./Tree/Tree.tsx";
 import './App.css'
 
 function App() {
-    const [translate, containerRef] = useCenteredTree();
-    const [tree, setTree] = useState(testData())
-
-    function change(id: string, update: (leaf: Leaf) => void) {
-        const leaf = findLeaf(id, tree)
-        if (!leaf) return
-        update(leaf)
-        bind()
-    }
-
-    function findLeaf(id: string, root: Leaf): Leaf | undefined {
-        if (root.id === id) return root;
-        return root.children?.map(r => findLeaf(id, r)).filter(Boolean)[0]
-    }
-
-    function toDatum(root: Leaf): RawNodeDatum {
-        return {
-            name: root.name,
-            attributes: {
-                id: root.id,
-                status: root.status
-            },
-            children: root.children.map(toDatum)
-        }
-    }
-
-    function bind() {
-        setTree(l => deepClone(l))
-    }
-
-    function id(node: RawNodeDatum) {
-        return node.attributes?.id as string;
-    }
-
-    return (
-        <>
-            <h3>🪩 Disco</h3>
-            <div className="tree" ref={containerRef}>
-                <Tree data={toDatum(tree)}
-                      collapsible={false}
-                      zoomable={false}
-                      orientation={'vertical'}
-                      translate={translate}
-                      initialDepth={100}
-                      pathFunc={'step'}
-                      renderCustomNodeElement={renderCard}
-                      onNodeClick={e => {
-                          change(id(e.data), leaf => {
-                              leaf.status = Status.done
-                              // Leaf.create({
-                              //     name: `child of ${leaf.name}`,
-                              //     parent: leaf
-                              // }) 
-                          })
-                      }}
-                />
-            </div>
-        </>
-    )
-
-    function renderCard({nodeDatum, onNodeClick}: CustomNodeElementProps) {
-        return <g className={`card ${nodeDatum.attributes?.status}`} onClick={onNodeClick}>
-            <defs>
-                <filter id="shadow">
-                    <feDropShadow dx="2" dy="2" stdDeviation="1" floodOpacity="0.3"/>
-                </filter>
-            </defs>
-            <rect width="100" 
-                  height="100" 
-                  x="-50" 
-                  y="-50"
-                  filter="url(#shadow)"
-            />
-            <text
-                strokeWidth="0"
-                x="0"
-                y="0"
-                textAnchor="middle"
-                dominantBaseline="middle">
-                {nodeDatum.name}
-            </text>
-        </g>;
-    }
-
-    function useCenteredTree() {
-        const [translate, setTranslate] = useState({x: 0, y: 0});
-        const containerRef = useCallback((containerElem: HTMLDivElement | null) => {
-            if (containerElem !== null) {
-                const {width} = containerElem.getBoundingClientRect();
-                setTranslate({x: width / 2, y: 100});
-            }
-        }, []);
-        return [translate, containerRef] as const;
-    }
+    return <>
+        <h3>🪩 Disco</h3>
+        <Tree root={testData()}/>
+    </>
 
     function testData() {
         const root = Leaf.create({name: 'root'});
@@ -110,42 +19,6 @@ function App() {
 
         return root;
     }
-}
-
-function deepClone(obj, cache = new WeakMap()) {
-    if (obj === null || typeof obj !== 'object') {
-        return obj; 
-    }
-
-    if (cache.has(obj)) {
-        return cache.get(obj); 
-    }
-
-    const clone = Array.isArray(obj) ? [] : Object.create(Object.getPrototypeOf(obj));
-
-    cache.set(obj, clone);
-
-    const descriptors = Object.getOwnPropertyDescriptors(obj);
-
-    for (const key in descriptors) {
-        if (descriptors.hasOwnProperty(key)) {
-            const descriptor = descriptors[key];
-
-            if (descriptor.get || descriptor.set) {
-                Object.defineProperty(clone, key, {
-                    get: descriptor.get ? descriptor.get.bind(clone) : undefined,
-                    set: descriptor.set ? descriptor.set.bind(clone) : undefined,
-                    enumerable: descriptor.enumerable,
-                    configurable: descriptor.configurable
-                });
-            } else {
-                descriptor.value = deepClone(descriptor.value, cache);
-                Object.defineProperty(clone, key, descriptor);
-            }
-        }
-    }
-
-    return clone;
 }
 
 export default App
