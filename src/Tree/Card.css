@@ -52,3 +52,11 @@
         }
     }
 }
+
+.card-controls {
+    position: absolute;
+    margin-top: -50px;
+    background-color: #fff;
+    width: 200px;
+    height: 50px;
+}

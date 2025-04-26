@@ -10,6 +10,7 @@ interface CardProps extends CustomNodeElementProps {
 
 export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) {
     return <foreignObject width="102" height="102" x="-51" y="-51">
+        {isSelected && <div className="card-controls">HE IS WORKING THE CONTROLS</div>}
         <div className={`card ${nodeDatum.attributes?.status} ${isSelected ? 'selected' : ''}`}
              onClick={onNodeClick}>
             <textarea className="name"
