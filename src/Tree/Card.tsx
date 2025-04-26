@@ -28,7 +28,7 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
     </foreignObject>
 
     function addChild() {
-        onChange(nodeDatum?.attributes?.id as string, leaf => Leaf.create({
+        return () => onChange(nodeDatum?.attributes?.id as string, leaf => Leaf.create({
             name: `child of ${nodeDatum.name}`,
             parent: leaf
         }));
