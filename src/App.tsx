@@ -1,18 +1,17 @@
-import './App.css'
 import {Leaf, Status} from "./Tree/leaf.ts";
 import {CustomNodeElementProps, RawNodeDatum, Tree} from "react-d3-tree";
 import {useCallback, useState} from "react";
+import './App.css'
 
 function App() {
     const [translate, containerRef] = useCenteredTree();
-    const [leaves, setLeaves] = useState(testData())
+    const [tree, setTree] = useState(testData())
 
-    function updateNode(id: string, update: (leaf: Leaf) => void) {
-        setLeaves(_l => {
-            const found = findLeaf(id, _l)
-            if (found) update(found)
-            return {..._l} as Leaf;
-        })
+    function change(id: string, update: (leaf: Leaf) => void) {
+        const leaf = findLeaf(id, tree)
+        if (!leaf) return
+        update(leaf)
+        bind()
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {
@@ -21,42 +20,33 @@ function App() {
     }
 
     function toDatum(root: Leaf): RawNodeDatum {
-        const result = {
+        return {
             name: root.name,
             attributes: {
                 id: root.id,
                 status: root.status
             },
             children: root.children.map(toDatum)
-        };
-        console.log(result)
-        return result
+        }
     }
 
     function bind() {
-        setLeaves(l => ({...l}) as Leaf)
+        setTree(l => {
+            let newVar = ({...l}) as Leaf;
+            console.log(newVar)
+            return newVar 
+        })
     }
 
     function id(node: RawNodeDatum) {
         return node.attributes?.id as string;
     }
 
-    function addChild(nodeId: string) {
-        const leaf = findLeaf(nodeId, leaves)
-        if (!leaf) return
-        
-        Leaf.create({
-            name: `child of ${leaf.name}`,
-            parent: leaf
-        })
-        bind();
-    }
-
     return (
         <>
             <h3>🪩 Disco</h3>
             <div className="tree" ref={containerRef}>
-                <Tree data={toDatum(leaves)}
+                <Tree data={toDatum(tree)}
                       collapsible={false}
                       zoomable={false}
                       orientation={'vertical'}
@@ -65,7 +55,13 @@ function App() {
                       pathFunc={'step'}
                       renderCustomNodeElement={renderCard}
                       onNodeClick={e => {
-                          addChild(id(e.data));
+                          change(id(e.data), leaf => {
+                              leaf.status = Status.done
+                              // Leaf.create({
+                              //     name: `child of ${leaf.name}`,
+                              //     parent: leaf
+                              // }) 
+                          })
                       }}
                 />
             </div>
