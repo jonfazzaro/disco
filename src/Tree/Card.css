@@ -10,6 +10,10 @@
     .name {
         width: 90%;
         text-align: center;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        font-size: 1.2rem;
     }
 
 
