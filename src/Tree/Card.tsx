@@ -1,5 +1,5 @@
 import {CustomNodeElementProps} from "react-d3-tree";
-import {Leaf} from "./leaf.ts";
+import {Leaf, Status} from "./leaf.ts";
 import * as React from "react";
 import './Card.css'
 
@@ -9,9 +9,22 @@ interface CardProps extends CustomNodeElementProps {
 }
 
 export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) {
-    return <foreignObject width="150" height="150" x="-51" y="-51">
-        <div className={`card ${nodeDatum.attributes?.status} ${isSelected ? 'selected' : ''}`}
-             onClick={onNodeClick}>
+    return <>
+        {isSelected &&
+            <foreignObject width="210" height="40" x="-101" y="-101">
+                <div className="card-controls">
+                    <button className="add-child" onClick={addChild}></button>
+                    <div className="set-status">
+                        <button className="new" onClick={set(Status.new)}></button>
+                        <button className="doing" onClick={set(Status.doing)}></button>
+                        <button className="done" onClick={set(Status.done)}></button>
+                        <button className="canceled" onClick={set(Status.canceled)}></button>
+                    </div>
+                </div>
+            </foreignObject>}
+        <foreignObject width="150" height="150" x="-51" y="-51">
+            <div className={`card ${nodeDatum.attributes?.status} ${isSelected ? 'selected' : ''}`}
+                 onClick={onNodeClick}>
             <textarea className="name"
                       name="tree-leaf-name"
                       value={truncate(nodeDatum.name)}
@@ -21,17 +34,22 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
                       rows={1}
                       maxLength={30}
             />
-            {isSelected && <div className="controls">
-                <button onClick={addChild}>➕</button>
-            </div>}
-        </div>
-    </foreignObject>
+            </div>
+        </foreignObject>
+    </>
 
     function addChild() {
-        return () => onChange(nodeDatum?.attributes?.id as string, leaf => Leaf.create({
-            name: `child of ${nodeDatum.name}`,
-            parent: leaf
-        }));
+        onChange(nodeDatum?.attributes?.id as string, leaf => {
+            console.log("add child clicked")
+            return Leaf.create({
+                name: `child of ${nodeDatum.name}`,
+                parent: leaf
+            })
+        });
+    }
+    
+    function set(status: Status) {
+        return () => onChange(nodeDatum.attributes?.id as string, l => l.status = status)
     }
 
     function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
