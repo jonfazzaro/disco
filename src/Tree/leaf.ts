@@ -74,6 +74,16 @@ export class Leaf {
             this.status = status;
     }
 
+    delete() {
+        this.status = Status.canceled;
+        this.pick();
+    }
+
+    private pick() {
+        if (!this.parent) return
+        this.parent.children = this.parent.children.filter(c => c !== this);
+        this.parent = null;
+    }
 }
 
 export enum Status {

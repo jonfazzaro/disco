@@ -2,7 +2,11 @@ import {Leaf, Status} from "./leaf.ts";
 import {expect} from "vitest";
 
 describe('The leaf', () => {
-    let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf, cousin: Leaf;
+    let leaf: Leaf, 
+        parent: Leaf, 
+        sibling: Leaf, 
+        grandchild: Leaf, 
+        cousin: Leaf;
 
     beforeEach(() => {
         arrangeLeaves();
@@ -148,6 +152,23 @@ describe('The leaf', () => {
         });
     });
 
+    describe('when deleting', () => {
+        beforeEach(() => {
+            grandchild.status = Status.done;
+            cousin.delete()
+        });
+            
+        it('no longer has a parent', () => {
+            expect(cousin.parent).toBeNull()
+            expect(leaf.children).not.toContain(cousin)
+        });
+
+        it('propagates status as if it was canceled', () => {
+            expect(leaf.status).toEqual(Status.done);
+        });
+
+    });
+    
     function arrangeLeaves() {
         parent = Leaf.createNull({name: "Clean the house", id: "c9d6431d-6166-4ec3-9485-0db974753299"})
         leaf = Leaf.createNull({name: "dishes", parent: parent, id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"});
