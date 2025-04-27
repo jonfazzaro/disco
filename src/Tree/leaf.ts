@@ -48,7 +48,7 @@ export class Leaf {
     }
 
     propagateStatus() {
-        this.propagateIfAll([Status.new]);
+        this.propagateIfAll([Status.new, Status.canceled]);
         this.propagateIfSome(Status.doing);
         this.propagateIfAll([Status.done, Status.canceled]);
     }
