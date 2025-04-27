@@ -11,7 +11,7 @@ interface CardProps extends CustomNodeElementProps {
 export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) {
     return <>
         {isSelected &&
-            <foreignObject width="210" height="40" x="-101" y="-101">
+            <foreignObject width="220" height="50" x="-111" y="-101">
                 <div className="card-controls">
                     <button className="add-child" title="Add a new child leaf" onClick={addChild}></button>
                     <div className="set-status">
