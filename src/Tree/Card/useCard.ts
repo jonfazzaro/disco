@@ -1,5 +1,5 @@
 import {TreeNodeDatum} from "react-d3-tree";
-import {Leaf} from "./leaf.ts";
+import {Leaf} from "../core/leaf.ts";
 import * as React from "react";
 
 export function useCard({nodeDatum, onChange}: {

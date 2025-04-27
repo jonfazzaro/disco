@@ -1,5 +1,5 @@
 import {TreeNodeDatum} from "react-d3-tree";
-import {Leaf, Status} from "./leaf.ts";
+import {Leaf, Status} from "../core/leaf.ts";
 
 export interface ToolbarProps {
     nodeDatum: TreeNodeDatum;

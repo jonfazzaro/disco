@@ -1,9 +1,9 @@
-import {Leaf} from "./leaf.ts";
+import {Leaf} from "./core/leaf.ts";
 import {useTree} from "./useTree.ts";
 import {RawNodeDatum, Tree as ReactD3Tree} from "react-d3-tree";
 import {useCallback, useState} from "react";
-import {Card} from "./Card.tsx";
-import {Toolbar} from "./Toolbar.tsx";
+import {Card} from "./Card/Card.tsx";
+import {Toolbar} from "./Toolbar/Toolbar.tsx";
 
 export function Tree({root}: { root: Leaf }) {
     const [translate, containerRef] = useCenteredTree();

@@ -1,5 +1,5 @@
 import {SyntheticEventHandler, TreeNodeDatum} from "react-d3-tree";
-import {Leaf} from "./leaf.ts";
+import {Leaf} from "../core/leaf.ts";
 import './Card.css'
 import {useCard} from "./useCard.ts";
 

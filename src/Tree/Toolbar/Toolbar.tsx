@@ -1,4 +1,4 @@
-import {Status} from "./leaf.ts";
+import {Status} from "../core/leaf.ts";
 import {ToolbarProps, useToolbar} from "./useToolbar.ts";
 
 export function Toolbar({nodeDatum, onChange}: ToolbarProps) {

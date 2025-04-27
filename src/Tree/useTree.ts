@@ -1,4 +1,4 @@
-import {Leaf} from "./leaf.ts";
+import {Leaf} from "./core/leaf.ts";
 import {useState} from "react";
 import {RawNodeDatum} from "react-d3-tree";
 import {deepClone} from "../deepClone.ts";
