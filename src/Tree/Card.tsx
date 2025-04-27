@@ -20,6 +20,7 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
                         <button className="done" title="Set status to done" onClick={set(Status.done)}></button>
                         <button className="canceled" title="Set status to canceled" onClick={set(Status.canceled)}></button>
                     </div>
+                    <button className="delete" title="Delete leaf" onClick={deleteLeaf}>❌</button>
                 </div>
             </foreignObject>}
         <foreignObject width="150" height="150" x="-51" y="-51">
@@ -40,11 +41,16 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
 
     function addChild() {
         onChange(nodeDatum?.attributes?.id as string, leaf => {
-            console.log("add child clicked")
             return Leaf.create({
                 name: `child of ${nodeDatum.name}`,
                 parent: leaf
             })
+        });
+    }
+
+    function deleteLeaf() {
+        onChange(nodeDatum?.attributes?.id as string, leaf => {
+            leaf.delete()
         });
     }
     

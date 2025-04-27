@@ -64,10 +64,11 @@
     margin: 5px;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 5px;
     align-items: center;
-    justify-items: center;
+    justify-content: space-between;
+    
 
     button.add-child {
         justify-self: start;
@@ -75,6 +76,15 @@
         border: 1px solid #7a7a40;
         width: 20px;
         height: 20px;
+    }
+    
+    button.delete {
+        justify-self: end;
+        background-color: transparent;
+        border: none;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
     }
 
     .set-status {
