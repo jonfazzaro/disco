@@ -3,6 +3,7 @@ import {useTree} from "./useTree.ts";
 import {RawNodeDatum, Tree as ReactD3Tree} from "react-d3-tree";
 import {useCallback, useState} from "react";
 import {Card} from "./Card.tsx";
+import {Toolbar} from "./Toolbar.tsx";
 
 export function Tree({root}: { root: Leaf }) {
     const [translate, containerRef] = useCenteredTree();
@@ -16,8 +17,20 @@ export function Tree({root}: { root: Leaf }) {
                      translate={translate}
                      initialDepth={100}
                      pathFunc={'step'}
-                     renderCustomNodeElement={e =>
-                         <Card {...e} isSelected={selectedId === id(e.nodeDatum)} onChange={change}/>}
+                     renderCustomNodeElement={e => {
+                         return <>
+                             {(selectedId === id(e.nodeDatum)) &&
+                                 <foreignObject id="toolbar-container" width="220" height="50" x="-111" y="-101">
+                                     <Toolbar nodeDatum={e.nodeDatum} onChange={change}/>
+                                 </foreignObject>}
+                             <foreignObject id="card-container" width="150" height="150" x="-51" y="-51">
+                                 <Card nodeDatum={e.nodeDatum} 
+                                       isSelected={selectedId === id(e.nodeDatum)}
+                                       onChange={change} 
+                                       onNodeClick={e.onNodeClick}/>
+                             </foreignObject>
+                         </>
+                     }}
                      onNodeClick={e => {
                          setSelectedId(id(e.data))
                      }}
