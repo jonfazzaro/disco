@@ -1,7 +1,7 @@
 import {SyntheticEventHandler, TreeNodeDatum} from "react-d3-tree";
 import {Leaf} from "./leaf.ts";
-import * as React from "react";
 import './Card.css'
+import {useCard} from "./useCard.ts";
 
 interface CardProps {
     nodeDatum: TreeNodeDatum;
@@ -11,8 +11,10 @@ interface CardProps {
 }
 
 export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) {
+    const { onChangeName, blurOnEnter, truncate } = useCard({nodeDatum, onChange})
+    
     return <div className={`card ${nodeDatum.attributes?.status} ${isSelected ? 'selected' : ''}`}
-                 onClick={onNodeClick}>
+                onClick={onNodeClick}>
                 <textarea className="name"
                           name="tree-leaf-name"
                           value={truncate(nodeDatum.name)}
@@ -20,26 +22,8 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
                           onKeyDown={blurOnEnter}
                           autoComplete="off"
                           rows={1}
-                          maxLength={30} />
-            </div>
+                          maxLength={30}/>
+    </div>
 
 
-    function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
-        autoAdjustHeight(event);
-        onChange(nodeDatum.attributes?.id as string, l => l.name = event.currentTarget.value);
-    }
-
-    function autoAdjustHeight(event: React.FormEvent<HTMLTextAreaElement>) {
-        event.currentTarget.style.height = "auto";
-        event.currentTarget.style.height = event.currentTarget.scrollHeight + "px";
-    }
-
-    function blurOnEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-        if (event.key === 'Enter')
-            event.currentTarget.blur();
-    }
-
-    function truncate(str: string, maxLength: number = 30): string {
-        return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
-    }
 }
