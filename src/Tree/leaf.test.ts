@@ -94,8 +94,8 @@ describe('The leaf', () => {
                 leaf.status = Status.canceled
             });
 
-            it("changes the parent to new", () => {
-                expect(parent.status).toEqual(Status.new);
+            it("does not change the parent's status", () => {
+                expect(parent.status).toEqual(Status.doing);
             });
 
             describe('when a sibling is doing', () => {
