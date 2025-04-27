@@ -13,12 +13,12 @@ export function Card({nodeDatum, onNodeClick, isSelected, onChange}: CardProps) 
         {isSelected &&
             <foreignObject width="210" height="40" x="-101" y="-101">
                 <div className="card-controls">
-                    <button className="add-child" onClick={addChild}></button>
+                    <button className="add-child" title="Add a new child leaf" onClick={addChild}></button>
                     <div className="set-status">
-                        <button className="new" onClick={set(Status.new)}></button>
-                        <button className="doing" onClick={set(Status.doing)}></button>
-                        <button className="done" onClick={set(Status.done)}></button>
-                        <button className="canceled" onClick={set(Status.canceled)}></button>
+                        <button className="new" title="Set status to new" onClick={set(Status.new)}></button>
+                        <button className="doing" title="Set status to doing" onClick={set(Status.doing)}></button>
+                        <button className="done" title="Set status to done" onClick={set(Status.done)}></button>
+                        <button className="canceled" title="Set status to canceled" onClick={set(Status.canceled)}></button>
                     </div>
                 </div>
             </foreignObject>}
