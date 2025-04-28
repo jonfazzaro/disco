@@ -1,4 +1,4 @@
-import {CreateLeaf, CreateNullLeaf, Leaf, SerializedLeaf, Status} from "./leaf.ts";
+import {Leaf, SerializedLeaf, Status} from "./leaf.ts";
 import {expect} from "vitest";
 
 describe('The leaf', () => {

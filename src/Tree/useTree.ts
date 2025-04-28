@@ -5,7 +5,7 @@ import {deepClone} from "../deepClone.ts";
 import {useKeyPress} from "../useKeyPress.ts";
 import {HierarchyPointNode} from "d3-hierarchy";
 import {id} from "./node.ts";
-import {Forest} from "../Forest.ts";
+import {Forest} from "../Forest/Forest.ts";
 
 export function useTree(forest: Forest) {
     const [tree, setTree] = useState(Leaf.create({name: "Loading...", status: Status.canceled}));

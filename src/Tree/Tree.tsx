@@ -4,7 +4,7 @@ import {useCallback, useState} from "react";
 import {Card} from "./Card/Card.tsx";
 import {Toolbar} from "./Toolbar/Toolbar.tsx";
 import {id} from "./node.ts";
-import {Forest} from "../Forest.ts";
+import {Forest} from "../Forest/Forest.ts";
 
 interface TreeProps {
     forest: Forest;

@@ -1,6 +1,7 @@
 import {Tree} from "./Tree/Tree.tsx";
 import './App.css'
-import {FirebaseRealtimeForest} from "./Forest.ts";
+
+import {FirebaseRealtimeForest} from "./Forest/FirebaseRealtimeForest.ts";
 
 function App() {
 
