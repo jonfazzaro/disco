@@ -12,7 +12,7 @@ export interface CardProps {
 export function Card(props: CardProps) {
     const {onChangeName, blurOnEnter, selectAllText, truncate} = useCard(props)
 
-    return <div className={`card ${props.node.attributes?.status} ${props.isSelected ? 'selected' : ''}`}>
+    return <div className={`card ${props.node.attributes?.status} ${props.isSelected ? 'selected' : ''}`} >
                 <textarea className="name"
                           name="tree-leaf-name"
                           value={truncate(props.node.name)}

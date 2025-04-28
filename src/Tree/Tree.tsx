@@ -21,6 +21,7 @@ export function Tree({root}: { root: Leaf }) {
             pathFunc={'step'}
             renderCustomNodeElement={renderCard}
             onNodeClick={selectLeaf}
+            
         />
     </div>
 

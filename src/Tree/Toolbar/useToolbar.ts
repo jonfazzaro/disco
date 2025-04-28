@@ -11,7 +11,7 @@ export function useToolbar({node, changeLeaf}: CardProps) {
     function addChild() {
         changeLeaf(node?.attributes?.id as string, leaf => {
             return Leaf.create({
-                name: `child of ${node.name}`,
+                name: `task`,
                 parent: leaf
             })
         });
