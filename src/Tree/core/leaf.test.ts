@@ -1,11 +1,11 @@
-import {Leaf, Status} from "./leaf.ts";
+import {Leaf, SerializedLeaf, Status} from "./leaf.ts";
 import {expect} from "vitest";
 
 describe('The leaf', () => {
-    let leaf: Leaf, 
-        parent: Leaf, 
-        sibling: Leaf, 
-        grandchild: Leaf, 
+    let leaf: Leaf,
+        parent: Leaf,
+        sibling: Leaf,
+        grandchild: Leaf,
         cousin: Leaf;
 
     beforeEach(() => {
@@ -148,7 +148,7 @@ describe('The leaf', () => {
                     expect(sibling.status).toEqual(Status.canceled);
                 });
             });
-            
+
         });
     });
 
@@ -157,7 +157,7 @@ describe('The leaf', () => {
             grandchild.status = Status.done;
             cousin.delete()
         });
-            
+
         it('no longer has a parent', () => {
             expect(cousin.parent).toBeNull()
             expect(leaf.children).not.toContain(cousin)
@@ -166,9 +166,57 @@ describe('The leaf', () => {
         it('propagates status as if it was canceled', () => {
             expect(leaf.status).toEqual(Status.done);
         });
-
     });
-    
+
+    describe('when serializing', () => {
+        let serialized: SerializedLeaf;
+
+        beforeEach(() => {
+            serialized = parent.serialize()
+        });
+
+        it('returns a tree of serialize leaves', () => {
+            expect(serialized).toEqual({
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "id": "ba3de1d3-3ab0-4934-aea4-3fcc719ef174",
+                                "name": "separate delicates",
+                                "status": "new",
+                            },
+                            {
+                                "children": [],
+                                "id": "fa3de1d3-3ab0-4934-aea4-3fcc719ef174",
+                                "name": "separate colors",
+                                "status": "doing",
+                            },
+                        ],
+                        "id": "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e",
+                        "name": "dishes",
+                        "status": "new",
+                    },
+                    {
+                        "children": [],
+                        "id": "6985e31c-2cd1-492d-be57-96a295869d8a",
+                        "name": "do the laundry",
+                        "status": "new",
+                    },
+                ],
+                "id": "c9d6431d-6166-4ec3-9485-0db974753299",
+                "name": "Clean the house",
+                "status": "new",
+            })
+        });
+
+        describe('and deserializing', () => {
+            it('rehydrates the tree', () => {
+                expect(Leaf.deserialize(serialized)).toEqual(parent)
+            });
+        });
+    });
+
     function arrangeLeaves() {
         parent = Leaf.createNull({name: "Clean the house", id: "c9d6431d-6166-4ec3-9485-0db974753299"})
         leaf = Leaf.createNull({name: "dishes", parent: parent, id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"});
@@ -186,7 +234,7 @@ describe('The leaf', () => {
             name: "separate colors",
             parent: leaf,
             status: Status.doing,
-            id: "fa3de1d3-3ab0-4934-aea4-3fcc719ef174" 
+            id: "fa3de1d3-3ab0-4934-aea4-3fcc719ef174"
         })
     }
 });

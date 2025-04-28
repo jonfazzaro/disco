@@ -10,6 +10,13 @@ export interface CreateNullLeaf extends CreateLeaf {
     id: string
 }
 
+export interface SerializedLeaf {
+    id: string, 
+    name: string,
+    status: Status,
+    children: SerializedLeaf[]
+}
+
 export class Leaf {
     id: string;
     name: string;
@@ -53,6 +60,12 @@ export class Leaf {
         this.propagateIfAll([Status.done, Status.canceled]);
     }
 
+    delete() {
+        this.status = Status.canceled;
+        this.pick();
+    }
+    
+
     private inheritDone() {
         if (this.status === Status.done) {
             this.childrenIn(Status.doing).forEach(c => c.status = Status.done);
@@ -74,15 +87,26 @@ export class Leaf {
             this.status = status;
     }
 
-    delete() {
-        this.status = Status.canceled;
-        this.pick();
-    }
-
     private pick() {
         if (!this.parent) return
         this.parent.children = this.parent.children.filter(c => c !== this);
         this.parent = null;
+    }
+
+    serialize() : SerializedLeaf {
+        return {
+            id: this.id,
+            name: this.name,
+            status: this.status,
+            children: this.children.map(c => c.serialize())
+        }
+    }
+
+    static deserialize(data: SerializedLeaf) {
+        const leaf = Leaf.createNull(data);
+        leaf.children = data.children.map(Leaf.deserialize);
+        leaf.children.forEach(c => c.parent = leaf);
+        return leaf;
     }
 }
 
