@@ -5,3 +5,6 @@ export interface Forest {
     save(tree: Leaf): Promise<void>
 }
 
+export interface LivingForest extends Forest {
+    watch(callback: (leaf:Leaf) => void): void
+}
