@@ -1,8 +1,10 @@
 import {Leaf} from "./core/leaf.ts";
 import {useState} from "react";
-import {RawNodeDatum} from "react-d3-tree";
+import {RawNodeDatum, TreeNodeDatum} from "react-d3-tree";
 import {deepClone} from "../deepClone.ts";
 import {useKeyPress} from "../useKeyPress.ts";
+import {HierarchyPointNode} from "d3-hierarchy";
+import {id} from "./node.ts";
 
 export function useTree(root: Leaf, onChange: (leaf: Leaf) => void = () => {}) {
     const [tree, setTree] = useState(root)
@@ -16,8 +18,12 @@ export function useTree(root: Leaf, onChange: (leaf: Leaf) => void = () => {}) {
         data: toDatum(tree),
         changeLeaf,
         selectedId,
-        setSelectedId
+        selectLeaf
     };
+
+    function selectLeaf(e: HierarchyPointNode<TreeNodeDatum>) {
+        setSelectedId(id(e.data))
+    }
 
     function changeLeaf(id: string, update: (leaf: Leaf) => void) {
         const leaf = findLeaf(id, tree)
@@ -46,5 +52,4 @@ export function useTree(root: Leaf, onChange: (leaf: Leaf) => void = () => {}) {
     function bind() {
         setTree(l => deepClone(l))
     }
-
 }

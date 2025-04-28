@@ -1,14 +1,14 @@
 import {Leaf} from "./core/leaf.ts";
 import {useTree} from "./useTree.ts";
-import {CustomNodeElementProps, RawNodeDatum, Tree as ReactD3Tree, TreeNodeDatum} from "react-d3-tree";
-import {HierarchyPointNode} from "d3-hierarchy";
+import {CustomNodeElementProps, Tree as ReactD3Tree} from "react-d3-tree";
 import {useCallback, useState} from "react";
 import {Card} from "./Card/Card.tsx";
 import {Toolbar} from "./Toolbar/Toolbar.tsx";
+import {id} from "./node.ts";
 
 export function Tree({root, onChange}: { root: Leaf, onChange: (leaf: Leaf) => void }) {
     const [translate, containerRef] = useCenteredTree();
-    const {data, changeLeaf, setSelectedId, selectedId} = useTree(root, onChange);
+    const {data, changeLeaf, selectedId, selectLeaf} = useTree(root, onChange);
 
     return <div className="tree" ref={containerRef}>
         <ReactD3Tree
@@ -37,14 +37,6 @@ export function Tree({root, onChange}: { root: Leaf, onChange: (leaf: Leaf) => v
                 <Card node={node} changeLeaf={changeLeaf} isSelected={isSelected}/>
             </foreignObject>
         </>
-    }
-
-    function selectLeaf(e: HierarchyPointNode<TreeNodeDatum>) {
-        setSelectedId(id(e.data))
-    }
-
-    function id(node: RawNodeDatum) {
-        return node.attributes?.id as string;
     }
 
     function useCenteredTree() {

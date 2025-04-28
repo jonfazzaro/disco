@@ -16,9 +16,7 @@ function App() {
     }
 
     function save(tree: Leaf) {
-        const value = JSON.stringify(tree.serialize());
-        console.log(value)
-        localStorage.setItem("disco_data", value)
+        localStorage.setItem("disco_data", JSON.stringify(tree.serialize()))
     }
 }
 
