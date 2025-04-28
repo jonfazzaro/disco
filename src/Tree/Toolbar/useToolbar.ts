@@ -5,7 +5,7 @@ export function useToolbar({node, changeLeaf}: CardProps) {
     return {
         addChild,
         deleteLeaf,
-        set
+        changeStatus
     }
 
     function addChild() {
@@ -18,12 +18,11 @@ export function useToolbar({node, changeLeaf}: CardProps) {
     }
 
     function deleteLeaf() {
-        changeLeaf(node?.attributes?.id as string, leaf => {
-            leaf.delete()
-        });
+        if (confirm('Delete Leaf: Are you sure?'))
+            changeLeaf(node?.attributes?.id as string, leaf => leaf.delete());
     }
 
-    function set(status: Status) {
+    function changeStatus(status: Status) {
         return () => changeLeaf(node.attributes?.id as string, l => l.status = status)
     }
 
