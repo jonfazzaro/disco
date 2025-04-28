@@ -5,6 +5,8 @@ import {Forest} from "./Forest.ts";
 export class FirebaseRealtimeForest implements Forest {
     private database = getDatabase()
     
+    constructor(private readonly key: string = "tree") { }
+
     async load(callback?: (leaf: Leaf) => void) {
         if (typeof callback === 'function') 
             this.watch(callback)
@@ -32,6 +34,6 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     private getRef() {
-        return ref(this.database, 'tree');
+        return ref(this.database, this.key);
     }
 }
