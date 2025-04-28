@@ -48,7 +48,7 @@ export function Tree({forest}: TreeProps) {
         const containerRef = useCallback((containerElem: HTMLDivElement | null) => {
             if (containerElem !== null) {
                 const {width} = containerElem.getBoundingClientRect();
-                setTranslate({x: width / 2, y: 100});
+                setTranslate({x: width / 2, y: 120});
             }
         }, []);
         return [translate, containerRef] as const;

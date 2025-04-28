@@ -6,7 +6,9 @@ import {FirebaseRealtimeForest} from "./Forest/FirebaseRealtimeForest.ts";
 function App() {
 
     return <>
-        <h3>🪩 Disco</h3>
+        <header>
+            <h1>🪩 Disco</h1>
+        </header>
         <Tree forest={new FirebaseRealtimeForest()}/>
     </>
 }
