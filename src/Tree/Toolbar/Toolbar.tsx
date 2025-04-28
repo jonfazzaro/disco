@@ -1,11 +1,12 @@
 import {Status} from "../core/leaf.ts";
 import {ToolbarProps, useToolbar} from "./useToolbar.ts";
+import './Toolbar.css'
 
 export function Toolbar({nodeDatum, onChange}: ToolbarProps) {
     const {addChild, deleteLeaf, set} = useToolbar({nodeDatum, onChange})
     
-    return <div className="card-controls">
-        <button className="add-child" title="Add a new child leaf" onClick={addChild}></button>
+    return <div className="toolbar">
+        <button className="add-child" title="Add a new child leaf" onClick={addChild}>➕</button>
         <div className="set-status">
             <button className="new" title="Set status to new" onClick={set(Status.new)}></button>
             <button className="doing" title="Set status to doing" onClick={set(Status.doing)}></button>
