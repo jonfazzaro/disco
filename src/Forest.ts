@@ -1,3 +1,4 @@
+import { getDatabase, ref, get, update } from "firebase/database";
 import {Leaf} from "./Tree/core/leaf.ts";
 
 export interface Forest {
@@ -15,5 +16,22 @@ export class LocalStorageForest implements Forest {
     save(tree: Leaf) {
         localStorage.setItem("disco_data", JSON.stringify(tree.serialize()))
         return Promise.resolve()
+    }
+}
+
+export class FirebaseRealtimeForest implements Forest {
+    private database = getDatabase()
+    async load() {
+        const snapshot = await get(ref(this.database, 'tree'))
+        if (snapshot.exists()) {
+            console.log(snapshot.val())
+            return Leaf.deserialize(snapshot.val())
+        }
+       
+        return Leaf.create({name: "Goal"})
+    }
+        
+    async save(tree: Leaf) {
+        await update(ref(this.database, 'tree'), tree.serialize())
     }
 }

@@ -1,4 +1,4 @@
-import {Leaf, SerializedLeaf, Status} from "./leaf.ts";
+import {CreateLeaf, CreateNullLeaf, Leaf, SerializedLeaf, Status} from "./leaf.ts";
 import {expect} from "vitest";
 
 describe('The leaf', () => {
@@ -213,6 +213,27 @@ describe('The leaf', () => {
         describe('and deserializing', () => {
             it('rehydrates the tree', () => {
                 expect(Leaf.deserialize(serialized)).toEqual(parent)
+            });
+
+            describe('given no children attribute', () => {
+                it('makes an empty one', () => {
+                    const cereal = {
+                        "id": "c9d6431d-6166-4ec3-9485-0db974753299",
+                        "name": "Clean the house",
+                        "status": "new",
+                    }
+                    
+                    const expected = Leaf.createNull({
+                        "id": "c9d6431d-6166-4ec3-9485-0db974753299",
+                        "name": "Clean the house",
+                        "status": Status.new,
+                        parent: null
+                    });
+                    
+                    // @ts-ignore
+                    expect(Leaf.deserialize(cereal)).toEqual(expected)
+                });
+
             });
         });
     });

@@ -50,7 +50,7 @@ export function useTree(forest: Forest) {
                 id: root.id,
                 status: root.status
             },
-            children: root.children.map(toDatum)
+            children: root.children?.map(toDatum)
         }
     }
 
