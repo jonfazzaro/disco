@@ -5,6 +5,7 @@ export function useCard({node, changeLeaf}: CardProps) {
     return {
         onChangeName,
         blurOnEnter,
+        selectAllText,
         truncate
     }
 
@@ -21,6 +22,10 @@ export function useCard({node, changeLeaf}: CardProps) {
     function blurOnEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {
         if (event.key === 'Enter')
             event.currentTarget.blur();
+    }
+    
+    function selectAllText(e: React.FocusEvent<HTMLTextAreaElement>) {
+        e.currentTarget.select();
     }
 
     function truncate(str: string, maxLength: number = 30): string {
