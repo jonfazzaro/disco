@@ -5,20 +5,20 @@ import {deepClone} from "../deepClone.ts";
 import {useKeyPress} from "../useKeyPress.ts";
 import {HierarchyPointNode} from "d3-hierarchy";
 import {id} from "./node.ts";
-import {LivingForest} from "../Forest/Forest.ts";
+import {Forest} from "../Forest/Forest.ts";
 
-export function useTree(forest: LivingForest) {
+export function useTree(forest: Forest) {
     const [tree, setTree] = useState(Leaf.create({name: "Loading...", status: Status.canceled}));
     const [selectedId, setSelectedId] = useState<string | null>(null);
     
     useEffect(() => {
-        forest.watch(setTree)
+        forest.load(setTree).then(setTree)
     }, [])
 
     useKeyPress('Escape', () => {
         setSelectedId(null);
-    }); 
-    
+    });
+
     return {
         data: toDatum(tree),
         changeLeaf,
