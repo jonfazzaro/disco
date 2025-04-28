@@ -1,12 +1,7 @@
-import {TreeNodeDatum} from "react-d3-tree";
 import {Leaf, Status} from "../core/leaf.ts";
+import {CardProps} from "../Card/Card.tsx";
 
-export interface ToolbarProps {
-    nodeDatum: TreeNodeDatum;
-    onChange: (id: string, update: (leaf: Leaf) => void) => void
-}
-
-export function useToolbar({nodeDatum, onChange}: ToolbarProps) {
+export function useToolbar({node, changeLeaf}: CardProps) {
     return {
         addChild,
         deleteLeaf,
@@ -14,22 +9,22 @@ export function useToolbar({nodeDatum, onChange}: ToolbarProps) {
     }
 
     function addChild() {
-        onChange(nodeDatum?.attributes?.id as string, leaf => {
+        changeLeaf(node?.attributes?.id as string, leaf => {
             return Leaf.create({
-                name: `child of ${nodeDatum.name}`,
+                name: `child of ${node.name}`,
                 parent: leaf
             })
         });
     }
 
     function deleteLeaf() {
-        onChange(nodeDatum?.attributes?.id as string, leaf => {
+        changeLeaf(node?.attributes?.id as string, leaf => {
             leaf.delete()
         });
     }
 
     function set(status: Status) {
-        return () => onChange(nodeDatum.attributes?.id as string, l => l.status = status)
+        return () => changeLeaf(node.attributes?.id as string, l => l.status = status)
     }
 
 }

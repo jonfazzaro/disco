@@ -1,11 +1,7 @@
-import {TreeNodeDatum} from "react-d3-tree";
-import {Leaf} from "../core/leaf.ts";
 import * as React from "react";
+import {CardProps} from "./Card.tsx";
 
-export function useCard({nodeDatum, onChange}: {
-    nodeDatum: TreeNodeDatum,
-    onChange: (id: string, update: (leaf: Leaf) => void) => void
-}) {
+export function useCard({node, changeLeaf}: CardProps) {
     return {
         onChangeName,
         blurOnEnter,
@@ -14,7 +10,7 @@ export function useCard({nodeDatum, onChange}: {
 
     function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
         autoAdjustHeight(event);
-        onChange(nodeDatum.attributes?.id as string, l => l.name = event.currentTarget.value);
+        changeLeaf(node.attributes?.id as string, l => l.name = event.currentTarget.value);
     }
 
     function autoAdjustHeight(event: React.FormEvent<HTMLTextAreaElement>) {

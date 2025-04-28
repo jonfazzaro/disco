@@ -13,13 +13,13 @@ export function useTree(root: Leaf) {
     }); 
     
     return {
-        data: toDatum(tree), 
-        change,
+        data: toDatum(tree),
+        changeLeaf,
         selectedId,
         setSelectedId
     };
 
-    function change(id: string, update: (leaf: Leaf) => void) {
+    function changeLeaf(id: string, update: (leaf: Leaf) => void) {
         const leaf = findLeaf(id, tree)
         if (!leaf) return
         update(leaf)

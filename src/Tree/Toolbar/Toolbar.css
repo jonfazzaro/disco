@@ -2,9 +2,11 @@
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-shadow: 0 3px 5px #ccc;
+    
     width: 195px;
     height: 25px;
-    box-shadow: 0 3px 5px #ccc;
+    
     padding: 5px;
     margin: 5px;
 
@@ -13,7 +15,6 @@
     grid-gap: 5px;
     align-items: center;
     justify-content: space-between;
-    
 
     button.add-child {
         justify-self: start;
