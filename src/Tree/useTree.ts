@@ -4,7 +4,7 @@ import {RawNodeDatum} from "react-d3-tree";
 import {deepClone} from "../deepClone.ts";
 import {useKeyPress} from "../useKeyPress.ts";
 
-export function useTree(root: Leaf) {
+export function useTree(root: Leaf, onChange: (leaf: Leaf) => void = () => {}) {
     const [tree, setTree] = useState(root)
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -24,6 +24,7 @@ export function useTree(root: Leaf) {
         if (!leaf) return
         update(leaf)
         bind()
+        onChange(tree)
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {

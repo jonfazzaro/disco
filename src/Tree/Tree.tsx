@@ -6,9 +6,9 @@ import {useCallback, useState} from "react";
 import {Card} from "./Card/Card.tsx";
 import {Toolbar} from "./Toolbar/Toolbar.tsx";
 
-export function Tree({root}: { root: Leaf }) {
+export function Tree({root, onChange}: { root: Leaf, onChange: (leaf: Leaf) => void }) {
     const [translate, containerRef] = useCenteredTree();
-    const {data, changeLeaf, setSelectedId, selectedId} = useTree(root);
+    const {data, changeLeaf, setSelectedId, selectedId} = useTree(root, onChange);
 
     return <div className="tree" ref={containerRef}>
         <ReactD3Tree
@@ -21,7 +21,6 @@ export function Tree({root}: { root: Leaf }) {
             pathFunc={'step'}
             renderCustomNodeElement={renderCard}
             onNodeClick={selectLeaf}
-            
         />
     </div>
 
