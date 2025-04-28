@@ -1,14 +1,18 @@
-import {Leaf} from "./core/leaf.ts";
 import {useTree} from "./useTree.ts";
 import {CustomNodeElementProps, Tree as ReactD3Tree} from "react-d3-tree";
 import {useCallback, useState} from "react";
 import {Card} from "./Card/Card.tsx";
 import {Toolbar} from "./Toolbar/Toolbar.tsx";
 import {id} from "./node.ts";
+import {Forest} from "../Forest.ts";
 
-export function Tree({root, onChange}: { root: Leaf, onChange: (leaf: Leaf) => void }) {
+interface TreeProps {
+    forest: Forest;
+}
+
+export function Tree({forest}: TreeProps) {
     const [translate, containerRef] = useCenteredTree();
-    const {data, changeLeaf, selectedId, selectLeaf} = useTree(root, onChange);
+    const {data, changeLeaf, selectedId, selectLeaf} = useTree(forest);
 
     return <div className="tree" ref={containerRef}>
         <ReactD3Tree

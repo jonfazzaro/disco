@@ -1,14 +1,19 @@
-import {Leaf} from "./core/leaf.ts";
-import {useState} from "react";
+import {Leaf, Status} from "./core/leaf.ts";
+import {useEffect, useState} from "react";
 import {RawNodeDatum, TreeNodeDatum} from "react-d3-tree";
 import {deepClone} from "../deepClone.ts";
 import {useKeyPress} from "../useKeyPress.ts";
 import {HierarchyPointNode} from "d3-hierarchy";
 import {id} from "./node.ts";
+import {Forest} from "../Forest.ts";
 
-export function useTree(root: Leaf, onChange: (leaf: Leaf) => void = () => {}) {
-    const [tree, setTree] = useState(root)
+export function useTree(forest: Forest) {
+    const [tree, setTree] = useState(Leaf.create({name: "Loading...", status: Status.canceled}));
     const [selectedId, setSelectedId] = useState<string | null>(null);
+    
+    useEffect(() => {
+        forest.load().then(setTree)
+    }, [])
 
     useKeyPress('Escape', () => {
         setSelectedId(null);
@@ -30,7 +35,7 @@ export function useTree(root: Leaf, onChange: (leaf: Leaf) => void = () => {}) {
         if (!leaf) return
         update(leaf)
         bind()
-        onChange(tree)
+        forest.save(tree).catch(console.error)
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {

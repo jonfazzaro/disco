@@ -1,23 +1,13 @@
-import {Leaf} from "./Tree/core/leaf.ts";
 import {Tree} from "./Tree/Tree.tsx";
 import './App.css'
+import {LocalStorageForest} from "./Forest.ts";
 
 function App() {
 
     return <>
         <h3>🪩 Disco</h3>
-        <Tree root={load()} onChange={save}/>
+        <Tree forest={new LocalStorageForest()}/>
     </>
-
-    function load() {
-        const data = localStorage.getItem("disco_data")
-        if (!data) return Leaf.create({name: "Goal"})
-        return Leaf.deserialize(JSON.parse(data));
-    }
-
-    function save(tree: Leaf) {
-        localStorage.setItem("disco_data", JSON.stringify(tree.serialize()))
-    }
 }
 
 export default App
