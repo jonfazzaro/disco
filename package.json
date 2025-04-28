@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "firebase": "^11.6.1",
     "react": "^19.0.0",
     "react-d3-tree": "^3.6.6",
     "react-dom": "^19.0.0",
