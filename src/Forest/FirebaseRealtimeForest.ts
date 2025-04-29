@@ -17,7 +17,7 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     async save(tree: Leaf) {
-        await update(this.getRef(), tree.serialize())
+        await this._database.update(tree.serialize())
     }
 
     private watch(callback: (leaf: Leaf) => void): void {
@@ -61,8 +61,8 @@ class FirebaseRealtimeDatabase implements RealtimeDatabase {
     onValue(callback: (data: any) => void): void {
     }
 
-    update(value: object): Promise<void> {
-        return Promise.resolve(undefined);
+    async update(value: object): Promise<void> {
+        return await update(this.ref(), value)
     }
     
     private ref(): DatabaseReference {
