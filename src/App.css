@@ -8,7 +8,7 @@ header {
     h1 {
         font-family: 'Madie Roger', sans-serif;
         font-size: 3rem;
-        color: orange;
+        color: var(--header-text-color);
         margin: 0;
     }
 

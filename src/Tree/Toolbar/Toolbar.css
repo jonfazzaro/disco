@@ -1,8 +1,8 @@
 .toolbar {
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: var(--toolbar-background);
+    border: 1px solid var(--toolbar-border);
     border-radius: 5px;
-    box-shadow: 0 3px 5px #ccc;
+    box-shadow: 0 3px 5px var(--toolbar-shadow);
     
     width: 215px;
     height: 25px;
@@ -18,8 +18,8 @@
 
     button.add-child {
         justify-self: start;
-        background-color: #ffff86;
-        border: 1px solid #7a7a40;
+        background-color: var(--new-leaf-background);
+        border: 1px solid var(--new-leaf-border);
         width: 20px;
         height: 20px;
         padding: 0;
@@ -42,36 +42,33 @@
         justify-items: end;
 
         button {
-            background-color: cornflowerblue;
-            border: 1px solid #555;
             border-radius: 50%;
             width: 18px;
             height: 18px;
 
-
             &.new {
-                background-color: #ffff86;
-                border: 1px solid #7a7a40;
+                background-color: var(--new-leaf-background);
+                border: 1px solid var(--new-leaf-border);
             }
 
             &.doing {
-                background-color: #b8d7fa;
-                border: 1px solid #17455d;
+                background-color: var(--doing-leaf-background);
+                border: 1px solid var(--doing-leaf-border);
             }
 
             &.done {
-                background-color: #b0f399;
-                border: 1px solid #3f6c1c;
+                background-color: var(--done-leaf-background);
+                border: 1px solid var(--done-leaf-border);
             }
 
             &.canceled {
-                background-color: #ddd;
-                border: 1px solid #555;
+                background-color: var(--canceled-leaf-background);
+                border: 1px solid var(--canceled-leaf-border);
             }
 
             &.blocked {
-                background-color: #f587ac;
-                border: 1px solid #834b63;
+                background-color: var(--blocked-leaf-background);
+                border: 1px solid var(--blocked-leaf-border);
             }
         }
     }
