@@ -57,6 +57,7 @@ export class Leaf {
     propagateStatus() {
         this.propagateIfAll([Status.new]);
         this.propagateIfSome(Status.doing);
+        this.propagateIfSome(Status.blocked);
         this.propagateIfAll([Status.done, Status.canceled]);
     }
 
@@ -114,6 +115,7 @@ export enum Status {
     new = 'new',
     doing = 'doing',
     done = 'done',
-    canceled = 'canceled'
+    canceled = 'canceled',
+    blocked = 'blocked'
 }
 

@@ -12,8 +12,8 @@ export function Toolbar(props:CardProps) {
             <button className="new" title="Set status to new" onClick={changeStatus(Status.new)}></button>
             <button className="doing" title="Set status to doing" onClick={changeStatus(Status.doing)}></button>
             <button className="done" title="Set status to done" onClick={changeStatus(Status.done)}></button>
-            <button className="canceled" title="Set status to canceled"
-                    onClick={changeStatus(Status.canceled)}></button>
+            <button className="canceled" title="Set status to canceled" onClick={changeStatus(Status.canceled)}></button>
+            <button className="blocked" title="Set status to blocked" onClick={changeStatus(Status.blocked)}></button>
         </div>
         <button className="delete" title="Delete leaf" onClick={deleteLeaf}>❌</button>
     </div>

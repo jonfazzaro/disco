@@ -4,7 +4,7 @@
     border-radius: 5px;
     box-shadow: 0 3px 5px #ccc;
     
-    width: 195px;
+    width: 215px;
     height: 25px;
     
     padding: 5px;
@@ -36,7 +36,7 @@
 
     .set-status {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         grid-gap: 5px;
         align-items: center;
         justify-items: end;
@@ -45,8 +45,8 @@
             background-color: cornflowerblue;
             border: 1px solid #555;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
 
 
             &.new {
@@ -67,6 +67,11 @@
             &.canceled {
                 background-color: #ddd;
                 border: 1px solid #555;
+            }
+
+            &.blocked {
+                background-color: #f587ac;
+                border: 1px solid #834b63;
             }
         }
     }

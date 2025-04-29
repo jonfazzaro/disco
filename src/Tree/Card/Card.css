@@ -50,5 +50,14 @@
         }
     }
 
+
+    &.blocked {
+        background-color: #f587ac;
+
+        &.blocked {
+            border: 1px solid #834b63;
+        }
+    }
+
 }
 

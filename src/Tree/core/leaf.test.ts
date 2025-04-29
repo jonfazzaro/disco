@@ -48,6 +48,20 @@ describe('The leaf', () => {
             });
         });
 
+        describe('to blocked', () => {
+            beforeEach(() => {
+                leaf.status = Status.blocked;
+            });
+
+            it('sets the status', () => {
+                expect(leaf.status).toEqual(Status.blocked);
+            });
+
+            it("sets the parent's status", () => {
+                expect(parent.status).toEqual(Status.blocked);
+            });
+        });
+
         describe('to done', () => {
             beforeEach(() => {
                 sibling.status = Status.new;
