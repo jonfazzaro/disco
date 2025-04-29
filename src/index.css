@@ -4,6 +4,14 @@
     font-family: Helvetica, Arial, sans-serif;
 }
 
+a {
+    color: orangered;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -12,4 +20,23 @@ body {
 .tree {
     background-color: white;
     height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        background-color: #222;
+        color: white;
+    }
+    
+    a {
+        color: darkorange;
+    }
+
+    .tree {
+        background-color: #222;
+    }
+    
+    .rd3t-link {
+        stroke: white !important;
+    }
 }
