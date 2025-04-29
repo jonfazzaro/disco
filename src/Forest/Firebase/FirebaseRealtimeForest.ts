@@ -6,7 +6,7 @@ import {FirebaseRealtimeDatabase} from "./FirebaseRealtimeDatabase.ts";
 
 export class FirebaseRealtimeForest implements Forest {
     private constructor(
-        private readonly key: string,
+        key: string,
         private readonly database: RealtimeDatabase = new FirebaseRealtimeDatabase(key)) {
     }
 
@@ -37,10 +37,9 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     private async get() {
-        console.log(this.key, this.database)
         const data = await this.database.get()
         if (data !== null)
-            return Leaf.deserialize(data.val())
+            return Leaf.deserialize(data)
 
         return Leaf.create({name: "Goal"})
     }
