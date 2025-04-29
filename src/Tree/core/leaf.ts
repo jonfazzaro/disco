@@ -51,6 +51,7 @@ export class Leaf {
     set status(value: Status) {
         this._status = value;
         this.inheritDone();
+        this.inheritCanceled();
         this.parent?.propagateStatus();
     }
 
@@ -66,6 +67,10 @@ export class Leaf {
         this.pick();
     }
 
+    private inheritCanceled() {
+        if (this.status === Status.canceled)
+            this.children.forEach(c => c.status = Status.canceled);
+    }
 
     private inheritDone() {
         if (this.status === Status.done) {
