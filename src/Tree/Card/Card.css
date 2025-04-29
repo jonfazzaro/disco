@@ -14,10 +14,8 @@
         background-color: transparent;
         border: none;
         outline: none;
-        font-size: 0.8rem;
         resize: none;
         overflow: hidden;
-        border: 1px solid red;
     }
 
     &.new {
