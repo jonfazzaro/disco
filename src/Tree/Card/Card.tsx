@@ -10,17 +10,17 @@ export interface CardProps {
 }
 
 export function Card(props: CardProps) {
-    const {onChangeName, blurOnEnter, selectAllText, truncate} = useCard(props)
+    const {onChangeName, blurOnEnter, selectAllText} = useCard(props)
 
     return <div className={`card ${props.node.attributes?.status} ${props.isSelected ? 'selected' : ''}`} >
                 <textarea className="name"
                           name="tree-leaf-name"
-                          value={truncate(props.node.name)}
+                          value={props.node.name}
                           onInput={onChangeName}
                           onKeyDown={blurOnEnter}
                           onFocus={selectAllText}
                           autoComplete="off"
                           rows={1}
-                          maxLength={30}/>
+                          maxLength={75}/>
     </div>
 }
