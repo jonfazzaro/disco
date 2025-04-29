@@ -1,10 +1,11 @@
 import {useEffect} from "react";
 
-export function useKeyPress(targetKey: string, action: () => void) {
+export function useKeyPress({key, ctrl = false}:{key:string, ctrl?:boolean }, action: () => void) {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === targetKey) {
+            if (event.key === key && (event.ctrlKey === ctrl || event.metaKey === ctrl)) {
                 action()
+                event.preventDefault();
             }
         };
 

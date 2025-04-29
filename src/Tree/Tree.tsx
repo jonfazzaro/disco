@@ -18,7 +18,8 @@ export function Tree({forest}: TreeProps) {
         <ReactD3Tree
             data={data}
             collapsible={false}
-            zoomable={false}
+            zoomable={true}
+            draggable={true}
             orientation={'vertical'}
             translate={translate}
             initialDepth={100}
@@ -34,7 +35,7 @@ export function Tree({forest}: TreeProps) {
         
         return <>
             {isSelected &&
-                <foreignObject id="toolbar-container" width="220" height="50" x="-111" y="-101">
+                <foreignObject id="toolbar-container" width="240" height="50" x="-121" y="-101">
                     <Toolbar node={node} changeLeaf={changeLeaf} isSelected={isSelected}/>
                 </foreignObject>}
             <foreignObject id="card-container" width="150" height="150" x="-51" y="-51" onClick={e.onNodeClick}>

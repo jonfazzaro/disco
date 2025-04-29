@@ -1,23 +1,31 @@
 import * as React from "react";
 import {CardProps} from "./Card.tsx";
 import {id} from "../node.ts";
+import {useEffect, useRef} from "react";
 
 export function useCard({node, changeLeaf}: CardProps) {
+    const nameRef = useRef<HTMLTextAreaElement>(null);
+    
+    useEffect(() => {
+        if (nameRef.current) 
+            autoAdjustHeight(nameRef.current);
+    })
+    
     return {
+        nameRef,
         onChangeName,
         blurOnEnter,
         selectAllText,
-        truncate
     }
 
     function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
-        autoAdjustHeight(event);
+        autoAdjustHeight(event.currentTarget);
         changeLeaf(id(node), l => l.name = event.currentTarget.value);
     }
 
-    function autoAdjustHeight(event: React.FormEvent<HTMLTextAreaElement>) {
-        event.currentTarget.style.height = "auto";
-        event.currentTarget.style.height = event.currentTarget.scrollHeight + "px";
+    function autoAdjustHeight(element: HTMLTextAreaElement) {
+        element.style.height = "auto";
+        element.style.height = element.scrollHeight + "px";
     }
 
     function blurOnEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -27,9 +35,5 @@ export function useCard({node, changeLeaf}: CardProps) {
     
     function selectAllText(e: React.FocusEvent<HTMLTextAreaElement>) {
         e.currentTarget.select();
-    }
-
-    function truncate(str: string, maxLength: number = 30): string {
-        return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
     }
 }

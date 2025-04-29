@@ -48,6 +48,20 @@ describe('The leaf', () => {
             });
         });
 
+        describe('to blocked', () => {
+            beforeEach(() => {
+                leaf.status = Status.blocked;
+            });
+
+            it('sets the status', () => {
+                expect(leaf.status).toEqual(Status.blocked);
+            });
+
+            it("sets the parent's status", () => {
+                expect(parent.status).toEqual(Status.blocked);
+            });
+        });
+
         describe('to done', () => {
             beforeEach(() => {
                 sibling.status = Status.new;
@@ -100,6 +114,11 @@ describe('The leaf', () => {
 
             it("does not change the parent's status", () => {
                 expect(parent.status).toEqual(Status.doing);
+            });
+
+            it('cancels the children', () => {
+                expect(grandchild.status).toEqual(Status.canceled);
+                expect(cousin.status).toEqual(Status.canceled);
             });
 
             describe('when a sibling is doing', () => {
@@ -222,14 +241,14 @@ describe('The leaf', () => {
                         "name": "Clean the house",
                         "status": "new",
                     }
-                    
+
                     const expected = Leaf.createNull({
                         "id": "c9d6431d-6166-4ec3-9485-0db974753299",
                         "name": "Clean the house",
                         "status": Status.new,
                         parent: null
                     });
-                    
+
                     // @ts-ignore
                     expect(Leaf.deserialize(cereal)).toEqual(expected)
                 });

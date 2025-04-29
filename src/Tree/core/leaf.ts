@@ -51,12 +51,14 @@ export class Leaf {
     set status(value: Status) {
         this._status = value;
         this.inheritDone();
+        this.inheritCanceled();
         this.parent?.propagateStatus();
     }
 
     propagateStatus() {
         this.propagateIfAll([Status.new]);
         this.propagateIfSome(Status.doing);
+        this.propagateIfSome(Status.blocked);
         this.propagateIfAll([Status.done, Status.canceled]);
     }
 
@@ -65,6 +67,10 @@ export class Leaf {
         this.pick();
     }
 
+    private inheritCanceled() {
+        if (this.status === Status.canceled)
+            this.children.forEach(c => c.status = Status.canceled);
+    }
 
     private inheritDone() {
         if (this.status === Status.done) {
@@ -114,6 +120,7 @@ export enum Status {
     new = 'new',
     doing = 'doing',
     done = 'done',
-    canceled = 'canceled'
+    canceled = 'canceled',
+    blocked = 'blocked'
 }
 

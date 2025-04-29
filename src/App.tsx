@@ -2,6 +2,7 @@ import {Tree} from "./Tree/Tree.tsx";
 import {FirebaseRealtimeForest} from "./Forest/Firebase/FirebaseRealtimeForest.ts";
 import {KeyMaster} from "./KeyMaster.ts";
 import './App.css'
+import {GitHubCorner} from "./GitHubCorner.tsx";
 
 function App() {
     const keyMaster = KeyMaster.create()
@@ -17,6 +18,7 @@ function App() {
             <button onClick={_e => keyMaster.newTree()}>🌳 New Tree</button>
         </header>
         <Tree forest={forest}/>
+        <GitHubCorner />
     </>
 }
 
