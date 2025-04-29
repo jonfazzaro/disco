@@ -3,12 +3,9 @@ import {Leaf} from "../Tree/core/leaf.ts";
 import {Forest} from "./Forest.ts";
 
 export class FirebaseRealtimeForest implements Forest {
-    private database = getDatabase()
-    private _database 
-    
-    constructor(private readonly key: string = "tree") {
-        this._database = new FirebaseRealtimeDatabase(this.key)
-    }
+    constructor(
+        private readonly key: string = "tree", 
+        private readonly database : RealtimeDatabase = new FirebaseRealtimeDatabase(this.key)) { }
 
     async load(callback?: (leaf: Leaf) => void) {
         if (typeof callback === 'function') 
@@ -17,28 +14,25 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     async save(tree: Leaf) {
-        await this._database.update(tree.serialize())
+        await this.database.update(tree.serialize())
     }
 
     private watch(callback: (leaf: Leaf) => void): void {
         if (typeof callback !== 'function') return
 
-        onValue(this.getRef(), (snapshot) => {
-            callback(Leaf.deserialize(snapshot.val()))
+        this.database.onValue((data) => {
+            callback(Leaf.deserialize(data))
         });
     }
 
     private async get() {
-        const data = await this._database.get()
+        const data = await this.database.get()
         if (data !== null)
             return Leaf.deserialize(data.val())
 
         return Leaf.create({name: "Goal"})
     }
 
-    private getRef() {
-        return ref(this.database, this.key);
-    }
 }
 
 interface RealtimeDatabase {
@@ -59,6 +53,9 @@ class FirebaseRealtimeDatabase implements RealtimeDatabase {
     }
 
     onValue(callback: (data: any) => void): void {
+        onValue(this.ref(), (snapshot) => {
+            callback(snapshot.val())
+        });
     }
 
     async update(value: object): Promise<void> {
