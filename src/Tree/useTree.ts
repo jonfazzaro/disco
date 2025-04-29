@@ -15,8 +15,8 @@ export function useTree(forest: Forest) {
         forest.load(setTree).then(setTree)
     }, [])
 
-    useKeyPress('Escape', () => {
-        setSelectedId(null);
+    useKeyPress({key:'Escape'}, () => {
+        setSelectedId(null)
     });
 
     return {
