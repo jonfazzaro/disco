@@ -19,28 +19,28 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     async load(callback?: (leaf: Leaf) => void) {
-        if (typeof callback === 'function')
-            this.watch(callback)
+        // if (typeof callback === 'function')
+        //     this.watch(callback)
         return await this.get();
     }
 
     async save(tree: Leaf) {
-        await this.database.update(tree.serialize())
+        // await this.database.update(tree.serialize())
     }
 
     private watch(callback: (leaf: Leaf) => void): void {
-        if (typeof callback !== 'function') return
-
-        this.database.onValue((data) => {
-            callback(Leaf.deserialize(data))
-        });
+        // if (typeof callback !== 'function') return
+        //
+        // this.database.onValue((data) => {
+        //     callback(Leaf.deserialize(data))
+        // });
     }
 
     private async get() {
-        const data = await this.database.get()
-        if (data !== null)
-            return Leaf.deserialize(data.val())
-
+        // const data = await this.database.get()
+        // if (data !== null)
+        //     return Leaf.deserialize(data.val())
+        //
         return Leaf.create({name: "Goal"})
     }
 
