@@ -5,6 +5,8 @@ import './App.css'
 
 function App() {
     const keyMaster = KeyMaster.create()
+    const forest = FirebaseRealtimeForest.create(keyMaster.key())
+    
     return <>
         <header>
             <div className="logo">
@@ -14,7 +16,7 @@ function App() {
             <p>Share this URL ☝️ to collaborate!</p>
             <button onClick={_e => keyMaster.newTree()}>🌳 New Tree</button>
         </header>
-        <Tree forest={new FirebaseRealtimeForest(keyMaster.key())}/>
+        <Tree forest={forest}/>
     </>
 }
 

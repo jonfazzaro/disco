@@ -3,12 +3,21 @@ import {Leaf} from "../Tree/core/leaf.ts";
 import {Forest} from "./Forest.ts";
 
 export class FirebaseRealtimeForest implements Forest {
-    constructor(
-        private readonly key: string = "tree", 
-        private readonly database : RealtimeDatabase = new FirebaseRealtimeDatabase(this.key)) { }
+    private constructor(
+        private readonly key: string,
+        private readonly database: RealtimeDatabase = new FirebaseRealtimeDatabase(this.key)) {
+    }
+
+    static create(key: string) {
+        return new FirebaseRealtimeForest(key)
+    }
+    
+    static createNull({data}: { data:any}) {
+        return new FirebaseRealtimeForest("NULL", new NullRealtimeDatabase(data))
+    }
 
     async load(callback?: (leaf: Leaf) => void) {
-        if (typeof callback === 'function') 
+        if (typeof callback === 'function')
             this.watch(callback)
         return await this.get();
     }
@@ -37,12 +46,33 @@ export class FirebaseRealtimeForest implements Forest {
 
 interface RealtimeDatabase {
     get(): Promise<any>
+
     onValue(callback: (data: any) => void): void
+
     update(value: object): Promise<void>
+}
+
+class NullRealtimeDatabase implements RealtimeDatabase {
+    constructor(private data: any) {
+    }
+
+    get(): Promise<any> {
+        return Promise.resolve(this.data);
+    }
+
+    onValue(callback: (data: any) => void): void {
+        callback(this.data)
+    }
+
+    update(value: object): Promise<void> {
+        this.data = value;
+        return Promise.resolve();
+    }
 }
 
 class FirebaseRealtimeDatabase implements RealtimeDatabase {
     private database = getDatabase()
+
     constructor(private readonly key: string) { }
 
     async get(): Promise<any> {
@@ -61,7 +91,7 @@ class FirebaseRealtimeDatabase implements RealtimeDatabase {
     async update(value: object): Promise<void> {
         return await update(this.ref(), value)
     }
-    
+
     private ref(): DatabaseReference {
         return ref(this.database, this.key);
     }
