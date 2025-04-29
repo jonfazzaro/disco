@@ -18,7 +18,8 @@ export function Tree({forest}: TreeProps) {
         <ReactD3Tree
             data={data}
             collapsible={false}
-            zoomable={false}
+            zoomable={true}
+            draggable={true}
             orientation={'vertical'}
             translate={translate}
             initialDepth={100}
