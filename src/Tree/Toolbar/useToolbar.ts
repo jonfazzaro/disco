@@ -1,5 +1,6 @@
 import {Leaf, Status} from "../core/leaf.ts";
 import {CardProps} from "../Card/Card.tsx";
+import {id} from "../node.ts";
 
 export function useToolbar({node, changeLeaf}: CardProps) {
     return {
@@ -9,7 +10,7 @@ export function useToolbar({node, changeLeaf}: CardProps) {
     }
 
     function addChild() {
-        changeLeaf(node?.attributes?.id as string, leaf => {
+        changeLeaf(id(node), leaf => {
             return Leaf.create({
                 name: `task`,
                 parent: leaf
@@ -19,11 +20,11 @@ export function useToolbar({node, changeLeaf}: CardProps) {
 
     function deleteLeaf() {
         if (confirm('Delete Leaf: Are you sure?'))
-            changeLeaf(node?.attributes?.id as string, leaf => leaf.delete());
+            changeLeaf(id(node), leaf => leaf.delete());
     }
 
     function changeStatus(status: Status) {
-        return () => changeLeaf(node.attributes?.id as string, l => l.status = status)
+        return () => changeLeaf(id(node), l => l.status = status)
     }
 
 }

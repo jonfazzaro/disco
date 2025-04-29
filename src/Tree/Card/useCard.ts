@@ -1,5 +1,6 @@
 import * as React from "react";
 import {CardProps} from "./Card.tsx";
+import {id} from "../node.ts";
 
 export function useCard({node, changeLeaf}: CardProps) {
     return {
@@ -11,7 +12,7 @@ export function useCard({node, changeLeaf}: CardProps) {
 
     function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
         autoAdjustHeight(event);
-        changeLeaf(node.attributes?.id as string, l => l.name = event.currentTarget.value);
+        changeLeaf(id(node), l => l.name = event.currentTarget.value);
     }
 
     function autoAdjustHeight(event: React.FormEvent<HTMLTextAreaElement>) {
