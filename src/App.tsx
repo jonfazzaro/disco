@@ -1,5 +1,5 @@
 import {Tree} from "./Tree/Tree.tsx";
-import {FirebaseRealtimeForest} from "./Forest/FirebaseRealtimeForest.ts";
+import {FirebaseRealtimeForest} from "./Forest/Firebase/FirebaseRealtimeForest.ts";
 import {KeyMaster} from "./KeyMaster.ts";
 import './App.css'
 
