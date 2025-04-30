@@ -19,6 +19,7 @@ export function Tree({forest}: TreeProps) {
             data={data}
             collapsible={false}
             zoomable={true}
+            scaleExtent={{min: 0.1, max: 4}}
             draggable={true}
             orientation={'vertical'}
             translate={translate}
