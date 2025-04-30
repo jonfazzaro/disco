@@ -2,7 +2,7 @@ import {Leaf, Status} from "../core/leaf.ts";
 import {CardProps} from "../Card/Card.tsx";
 import {id} from "../node.ts";
 
-export function useToolbar({node, changeLeaf}: CardProps) {
+export function useToolbar({node, changeLeaf}: CardProps, confirmPrompt: (message: string) => boolean = window.confirm) {
     return {
         addChild,
         deleteLeaf,
@@ -19,7 +19,7 @@ export function useToolbar({node, changeLeaf}: CardProps) {
     }
 
     function deleteLeaf() {
-        if (confirm('Delete Leaf: Are you sure?'))
+        if (confirmPrompt('Delete Leaf: Are you sure?'))
             changeLeaf(id(node), leaf => leaf.delete());
     }
 
