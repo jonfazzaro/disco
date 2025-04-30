@@ -1,7 +1,6 @@
 import {renderHook} from "@testing-library/react";
 import {useToolbar} from "./useToolbar.ts";
 import {Leaf, Status} from "../core/leaf.ts";
-import {expect} from "vitest";
 
 describe('The toolbar', () => {
 
@@ -51,6 +50,13 @@ describe('The toolbar', () => {
         });
     });
 
+    let hook: any
+    let tree: Leaf
+    let lastChangedId: string | null
+    let lastChangeCallback: ((leaf: Leaf) => void) | null
+    let lastConfirmMessage: string | null
+    let confirmResult: boolean
+    
     function arrangeHook() {
         hook = renderHook(() =>
             useToolbar(
@@ -75,13 +81,6 @@ describe('The toolbar', () => {
         lastChangeCallback?.(tree)
         expect(lastChangedId).toEqual("1234567890")
     }
-
-    let hook: any
-    let tree: Leaf
-    let lastChangedId: string | null
-    let lastChangeCallback: ((leaf: Leaf) => void) | null
-    let lastConfirmMessage: string | null
-    let confirmResult: boolean
 
     function model(hook: any) {
         const {result} = hook;
@@ -112,7 +111,6 @@ describe('The toolbar', () => {
         lastConfirmMessage = message
         return confirmResult;
     }
-
 
     const node = {
         name: "Lord Mayor",
