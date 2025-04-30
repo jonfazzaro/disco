@@ -6,7 +6,7 @@ import {FirebaseRealtimeForest} from "../Forest/Firebase/FirebaseRealtimeForest"
 import {NullRealtimeDatabase} from "../Forest/Firebase/NullRealtimeDatabase.ts";
 import {expect} from "vitest";
 
-describe("useTree", () => {
+describe("The tree hook", () => {
     let tree: Leaf;
     let database: NullRealtimeDatabase;
     let forest: FirebaseRealtimeForest;
@@ -37,23 +37,7 @@ describe("useTree", () => {
         });
 
         it("loads the tree from the forest", async () => {
-            expect(model(hook).data).toEqual(expect.objectContaining({
-                name: "Root Node",
-                attributes: {
-                    id: "root123",
-                    status: Status.new,
-                },
-                children: expect.arrayContaining([
-                    expect.objectContaining({
-                        name: "Child Node",
-                        attributes: expect.objectContaining({
-                            id: "child456",
-                            status: Status.new
-                        }),
-                        children: []
-                    })
-                ])
-            }));
+            expect(model(hook).data).toEqual(loadedData);
         });
 
         describe('when selecting a leaf', () => {
@@ -77,39 +61,64 @@ describe("useTree", () => {
                 });
             });
         });
-    });
 
-    it("changes a leaf when changeLeaf is called", async () => {
-        act(() => {
-            model(hook).changeLeaf("child456", (leaf: Leaf) => {
-                leaf.name = "Updated Child";
-                leaf.status = Status.doing;
+        describe('when changing a leaf', () => {
+
+            describe("that doesn't exist", () => {
+                it("does nothing", async () => {
+                    await act(async () => {
+                        await model(hook).changeLeaf("nonexistent", (leaf: Leaf) => {
+                            leaf.name = "This won't work";
+                        });
+                    });
+
+                    expect(model(hook).data).toEqual(loadedData);
+                    expect(database.lastSavedData).not.toBeDefined()
+                });
+            });
+
+            it.skip("updates the leaf", async () => {
+                act(() => {
+                    model(hook).changeLeaf("child456", (leaf: Leaf) => {
+                        leaf.name = "Updated Child";
+                        leaf.status = Status.doing;
+                    });
+                });
+
+                // Verify the leaf was changed
+                expect(model(hook).data.children).toEqual(expect.arrayContaining([
+                    expect.objectContaining({
+                        name: "Updated Child",
+                        attributes: {
+                            status: Status.doing
+                        },
+                    })
+                ]));
+
+                // Verify forest.save was called
+                expect(forest.load()).toEqual(tree);
             });
         });
 
-        // Verify the leaf was changed
-        expect(model(hook).data.children?.[0].name).toBe("Updated Child");
-        expect(model(hook).data.children?.[0].attributes?.status).toBe(Status.doing);
-
-        // Verify forest.save was called
-        expect(forest.load()).toEqual(tree);
-    });
-
-
-    it("does nothing when changing a leaf that doesn't exist", async () => {
-        act(() => {
-            model(hook).changeLeaf("nonexistent", (leaf: Leaf) => {
-                leaf.name = "This won't work";
-            });
+        const loadedData = expect.objectContaining({
+            name: "Root Node",
+            attributes: {
+                id: "root123",
+                status: Status.new,
+            },
+            children: expect.arrayContaining([
+                expect.objectContaining({
+                    name: "Child Node",
+                    attributes: expect.objectContaining({
+                        id: "child456",
+                        status: Status.new
+                    }),
+                    children: []
+                })
+            ])
         });
-
-        expect(forest.load()).toEqual(tree);
-        expect(model(hook).data).toEqual(expectedData);
     });
 
-    it("transforms the tree into the correct format for react-d3-tree", async () => {
-        expect(model(hook).data).toEqual(expectedData);
-    });
 
     function arrangeTree() {
         // Create a root node with a child

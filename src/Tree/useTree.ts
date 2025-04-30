@@ -27,7 +27,7 @@ export function useTree(forest: Forest) {
 
     return <TreeViewModel>{
         data: toDatum(tree),
-        // changeLeaf,
+        changeLeaf,
         selectedId,
         selectLeaf
     };
@@ -37,11 +37,11 @@ export function useTree(forest: Forest) {
     }
 
     function changeLeaf(id: string, update: (leaf: Leaf) => void) {
-        // const leaf = findLeaf(id, tree)
-        // if (!leaf) return
-        // update(leaf)
-        // bind()
-        // forest.save(tree).catch(console.error)
+        const leaf = findLeaf(id, tree)
+        if (!leaf) return
+        update(leaf)
+        bind()
+        return forest.save(tree).catch(console.error)
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {
