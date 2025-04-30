@@ -1,7 +1,7 @@
 import {Leaf, Status} from "./core/leaf.ts";
 import {useEffect, useState} from "react";
 import {RawNodeDatum, TreeNodeDatum} from "react-d3-tree";
-import {deepClone} from "../deepClone.ts";
+import {deepClone} from "./deepClone.ts";
 import {useKeyPress} from "../useKeyPress.ts";
 import {HierarchyPointNode} from "d3-hierarchy";
 import {id} from "./node.ts";

@@ -1,4 +1,4 @@
-import {IdGenerator, NullIdGenerator, RealIdGenerator} from "./IdGenerator.ts";
+import {IdGenerator, NullIdGenerator, RealIdGenerator} from "../IdGenerator.ts";
 
 interface CreateNullKeyMaster {
     currentPath: string;
