@@ -1,6 +1,7 @@
 import {renderHook} from "@testing-library/react";
 import {useToolbar} from "./useToolbar.ts";
 import {Leaf, Status} from "../core/leaf.ts";
+import {expect} from "vitest";
 
 describe('The toolbar', () => {
     let hook: any;
@@ -19,6 +20,21 @@ describe('The toolbar', () => {
         lastChangeCallback?.(tree)
         expect(lastChangedId).toEqual("1234567890")
         expect(tree.status).toEqual(Status.doing)
+    });
+
+    it('adds a child leaf', () => {
+        model(hook).addChild()
+        lastChangeCallback?.(tree)
+        expect(lastChangedId).toEqual("1234567890")
+        expect(tree.children).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    name: "task",
+                    parent: tree,
+                    status: Status.new
+                })
+            ])
+        )
     });
 
     function model(hook: any) {
@@ -43,7 +59,7 @@ describe('The toolbar', () => {
         lastChangedId = id
         lastChangeCallback = callback
     }
-    
+
     const node = {
         name: "Lord Mayor",
         attributes: {id: "1234567890", status: "new"},

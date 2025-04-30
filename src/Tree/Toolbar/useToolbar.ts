@@ -6,18 +6,18 @@ export function useToolbar(
     {node, changeLeaf}: CardProps
 ) {
     return {
-        // addChild,
+        addChild,
         // deleteLeaf,
         changeStatus
     }
 
     function addChild() {
-        // changeLeaf(id(node), leaf => {
-        //     return Leaf.create({
-        //         name: `task`,
-        //         parent: leaf
-        //     })
-        // });
+        changeLeaf(id(node), leaf => {
+            return Leaf.create({
+                name: `task`,
+                parent: leaf
+            })
+        });
     }
 
     function deleteLeaf() {
