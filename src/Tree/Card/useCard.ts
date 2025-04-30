@@ -7,25 +7,25 @@ export function useCard({node, changeLeaf}: CardProps) {
     const nameRef = useRef<HTMLTextAreaElement>(null);
     
     useEffect(() => {
-        if (nameRef.current) 
-            autoAdjustHeight(nameRef.current);
+        // if (nameRef.current) 
+        //     autoAdjustHeight(nameRef.current);
     })
     
     return {
-        nameRef,
+        // nameRef,
         onChangeName,
         blurOnEnter,
         selectAllText,
     }
 
     function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
-        autoAdjustHeight(event.currentTarget);
+        // autoAdjustHeight(event.currentTarget);
         changeLeaf(id(node), l => l.name = event.currentTarget.value);
     }
 
     function autoAdjustHeight(element: HTMLTextAreaElement) {
-        element.style.height = "auto";
-        element.style.height = element.scrollHeight + "px";
+        // element.style.height = "auto";
+        // element.style.height = element.scrollHeight + "px";
     }
 
     function blurOnEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {
