@@ -43,6 +43,16 @@ describe('The toolbar', () => {
                 "Delete Leaf: Are you sure?")
         });
 
+        describe('given the user cancels', () => {
+            it('does not delete the leaf', () => {
+                confirmResult = false;
+                model(hook).deleteLeaf()
+                lastChangeCallback?.(tree)
+                expect(tree.status).not.toEqual(Status.canceled)
+            });
+
+        });
+
     });
 
     let hook: any
@@ -79,6 +89,7 @@ describe('The toolbar', () => {
 
     function fakeConfirmFn(message: string) {
         lastConfirmMessage = message
+        return confirmResult;
     }
 
 
