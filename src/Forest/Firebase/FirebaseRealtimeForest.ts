@@ -14,13 +14,13 @@ export class FirebaseRealtimeForest implements Forest {
         return new FirebaseRealtimeForest(key)
     }
     
-    static createNull({data}: { data:any}) {
-        return new FirebaseRealtimeForest("NULL", new NullRealtimeDatabase(data))
+    static createNull(nullDatabase: NullRealtimeDatabase) {
+        return new FirebaseRealtimeForest("NULL", nullDatabase)
     }
 
     async load(callback?: (leaf: Leaf) => void) {
-        // if (typeof callback === 'function')
-        //     this.watch(callback)
+        if (typeof callback === 'function')
+            this.watch(callback)
         return await this.get();
     }
 
@@ -29,11 +29,9 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     private watch(callback: (leaf: Leaf) => void): void {
-        // if (typeof callback !== 'function') return
-        //
-        // this.database.onValue((data) => {
-        //     callback(Leaf.deserialize(data))
-        // });
+        this.database.onValue((data) => {
+            callback(Leaf.deserialize(data))
+        });
     }
 
     private async get() {

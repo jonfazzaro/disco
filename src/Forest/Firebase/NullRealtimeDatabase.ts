@@ -1,7 +1,10 @@
 import {RealtimeDatabase} from "./RealtimeDatabase.ts";
 
 export class NullRealtimeDatabase implements RealtimeDatabase {
+    onValueCallback: ((data: any) => void) | undefined;
+
     constructor(private data: any) {
+        this.onValueCallback = undefined;
     }
 
     get(): Promise<any> {
@@ -9,7 +12,7 @@ export class NullRealtimeDatabase implements RealtimeDatabase {
     }
 
     onValue(callback: (data: any) => void): void {
-        callback(this.data)
+        this.onValueCallback = callback;
     }
 
     update(value: object): Promise<void> {
