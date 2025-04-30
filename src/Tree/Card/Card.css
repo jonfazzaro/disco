@@ -15,7 +15,7 @@
         border: none;
         outline: none;
         resize: none;
-        overflow: hidden;
+        overflow: hidden; 
     }
 
     &.new {

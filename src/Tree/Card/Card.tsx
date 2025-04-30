@@ -17,11 +17,12 @@ export function Card(props: CardProps) {
                           name="tree-leaf-name"
                           ref={nameRef}
                           value={props.node.name}
+                          title={props.node.name}
                           onInput={onChangeName}
                           onKeyDown={blurOnEnter}
                           onFocus={selectAllText}
                           autoComplete="off"
                           rows={1}
-                          maxLength={75}/>
+                />
     </div>
 }
