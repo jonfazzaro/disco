@@ -26,7 +26,7 @@ export function Tree({forest}: TreeProps) {
             initialDepth={100}
             pathFunc={'step'}
             renderCustomNodeElement={renderCard}
-            onNodeClick={selectLeaf}
+            onNodeClick={e => selectLeaf(e.data)}
         />
     </div>
 
