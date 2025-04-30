@@ -19,13 +19,13 @@ export function useCard({node, changeLeaf}: CardProps) {
     }
 
     function onChangeName(event: React.FormEvent<HTMLTextAreaElement>) {
-        // autoAdjustHeight(event.currentTarget);
+        autoAdjustHeight(event.currentTarget);
         changeLeaf(id(node), l => l.name = event.currentTarget.value);
     }
 
     function autoAdjustHeight(element: HTMLTextAreaElement) {
-        // element.style.height = "auto";
-        // element.style.height = element.scrollHeight + "px";
+        element.style.height = "auto";
+        element.style.height = element.scrollHeight + "px";
     }
 
     function blurOnEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {

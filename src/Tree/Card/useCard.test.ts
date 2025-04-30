@@ -1,6 +1,7 @@
 import {Leaf, Status} from "../core/leaf.ts";
 import {renderHook} from "@testing-library/react";
 import {useCard} from "./useCard.ts";
+import * as React from "react";
 
 describe('The card hook', () => {
     beforeEach(() => {
@@ -8,11 +9,22 @@ describe('The card hook', () => {
         arrangeHook();
     });
 
-    it('changes name', () => {
-        const event = createFormEvent("New Name");
-        model(hook).onChangeName(event);
-        lastChangeCallback?.(leaf);
-        expect(lastChangedId).toEqual("1234567890");
+    describe('when changing the name', () => {
+        let event: React.FormEvent<HTMLTextAreaElement>;
+
+        beforeEach(() => {
+            event = createFormEvent("New Name");
+            model(hook).onChangeName(event);
+            lastChangeCallback?.(leaf);
+        });
+
+        it('changes the name on the leaf', () => {
+            expect(leaf.name).toEqual("New Name");
+        });
+
+        it('adjusts the height of the field', () => {
+            expect(event.currentTarget.style.height).toEqual("100px")
+        });
     });
 
     it('blurs on enter key press', () => {
