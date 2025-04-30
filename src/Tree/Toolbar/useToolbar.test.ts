@@ -8,23 +8,16 @@ describe('The toolbar', () => {
     beforeEach(() => {
         arrangeTree();
         arrangeCallbackTools();
-        hook = renderHook(() => 
-            useToolbar(
-                {node, changeLeaf: changeLeafFn, isSelected: false}, 
-                fakeConfirmFn));
+        arrangeHook();
     });
 
     it('updates leaf status', () => {
-        model(hook).changeStatus(Status.doing)()
-        lastChangeCallback?.(tree)
-        expect(lastChangedId).toEqual("1234567890")
+        changeStatus(Status.doing);
         expect(tree.status).toEqual(Status.doing)
     });
 
     it('adds a child leaf', () => {
-        model(hook).addChild()
-        lastChangeCallback?.(tree)
-        expect(lastChangedId).toEqual("1234567890")
+        addChildLeaf();
         expect(tree.children).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
@@ -45,15 +38,43 @@ describe('The toolbar', () => {
 
         describe('given the user cancels', () => {
             it('does not delete the leaf', () => {
-                confirmResult = false;
-                model(hook).deleteLeaf()
-                lastChangeCallback?.(tree)
+                deleteLeaf(false);
                 expect(tree.status).not.toEqual(Status.canceled)
             });
-
         });
 
+        describe('given the user confirms', () => {
+            it('deletes the leaf', () => {
+                deleteLeaf(true);
+                expect(tree.status).toEqual(Status.canceled)
+            });
+        });
     });
+
+    function arrangeHook() {
+        hook = renderHook(() =>
+            useToolbar(
+                {node, changeLeaf: changeLeafFn, isSelected: false},
+                fakeConfirmFn));
+    }
+
+    function deleteLeaf(promptResponse: boolean) {
+        confirmResult = promptResponse;
+        model(hook).deleteLeaf()
+        lastChangeCallback?.(tree)
+    }
+
+    function addChildLeaf() {
+        model(hook).addChild()
+        lastChangeCallback?.(tree)
+        expect(lastChangedId).toEqual("1234567890")
+    }
+
+    function changeStatus(status: Status.doing) {
+        model(hook).changeStatus(status)()
+        lastChangeCallback?.(tree)
+        expect(lastChangedId).toEqual("1234567890")
+    }
 
     let hook: any
     let tree: Leaf
