@@ -6,7 +6,31 @@ import * as React from "react";
 describe('The card hook', () => {
     beforeEach(() => {
         arrangeCallbackTools();
+        arrangeNameRef();
         arrangeHook();
+    });
+
+    it('adjusts the name field height', () => {
+        expect(model(hook).nameRef.current.style.height).toEqual("100px")
+    });
+
+    describe('given no name reference', () => {
+        it('does not adjust the height', () => {
+            arrangeNameRef(null);
+            arrangeHook(); 
+        });
+    });
+
+    it('blurs on enter key press', () => {
+        const event = createKeyboardEvent("Enter");
+        model(hook).blurOnEnter(event);
+        expect(event.currentTarget.blur).toHaveBeenCalled();
+    });
+
+    it('selects all text on focus', () => {
+        const event = createFocusEvent();
+        model(hook).selectAllText(event);
+        expect(event.currentTarget.select).toHaveBeenCalled();
     });
 
     describe('when changing the name', () => {
@@ -27,25 +51,12 @@ describe('The card hook', () => {
         });
     });
 
-    it('blurs on enter key press', () => {
-        const event = createKeyboardEvent("Enter");
-        model(hook).blurOnEnter(event);
-        expect(event.currentTarget.blur).toHaveBeenCalled();
-    });
-
-    it('selects all text on focus', () => {
-        const event = createFocusEvent();
-        model(hook).selectAllText(event);
-        expect(event.currentTarget.select).toHaveBeenCalled();
-    });
-
     let hook: any;
+    let nameRef: React.RefObject<HTMLTextAreaElement>;
     let leaf: Leaf;
-    let lastChangedId: string | null;
     let lastChangeCallback: ((leaf: Leaf) => void) | null;
 
     function arrangeCallbackTools() {
-        lastChangedId = null;
         lastChangeCallback = null;
         leaf = Leaf.createNull({
             name: "Lord Mayor",
@@ -54,9 +65,21 @@ describe('The card hook', () => {
         });
     }
 
+    function arrangeNameRef(value: object | null= {
+        value: "Lorem Ipsum",
+        style: {height: "0px"},
+        scrollHeight: 100
+    }) {
+        nameRef = {
+            current: value
+        } as React.RefObject<HTMLTextAreaElement>;
+    }
+
     function arrangeHook() {
         hook = renderHook(() =>
-            useCard({node, changeLeaf: changeLeafFn, isSelected: false}));
+            useCard(
+                {node, changeLeaf: changeLeafFn, isSelected: false}, 
+                () => nameRef));
     }
 
     function model(hook: any) {
@@ -64,8 +87,7 @@ describe('The card hook', () => {
         return result.current;
     }
 
-    function changeLeafFn(id: string, callback: (leaf: any) => void) {
-        lastChangedId = id;
+    function changeLeafFn(_id: string, callback: (leaf: any) => void) {
         lastChangeCallback = callback;
     }
 

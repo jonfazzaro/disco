@@ -3,16 +3,16 @@ import {CardProps} from "./Card.tsx";
 import {id} from "../node.ts";
 import {useEffect, useRef} from "react";
 
-export function useCard({node, changeLeaf}: CardProps) {
-    const nameRef = useRef<HTMLTextAreaElement>(null);
+export function useCard({node, changeLeaf}: CardProps, useReference = useRef) {
+    const nameRef = useReference<HTMLTextAreaElement>(null);
     
     useEffect(() => {
-        // if (nameRef.current) 
-        //     autoAdjustHeight(nameRef.current);
+        if (nameRef.current) 
+            autoAdjustHeight(nameRef.current);
     })
     
     return {
-        // nameRef,
+        nameRef,
         onChangeName,
         blurOnEnter,
         selectAllText,
