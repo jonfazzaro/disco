@@ -3,12 +3,12 @@ import {CardProps} from "../Card/Card.tsx";
 import {id} from "../node.ts";
 
 export function useToolbar(
-    // {node, changeLeaf}: CardProps
+    {node, changeLeaf}: CardProps
 ) {
     return {
         // addChild,
         // deleteLeaf,
-        // changeStatus
+        changeStatus
     }
 
     function addChild() {
@@ -26,7 +26,7 @@ export function useToolbar(
     }
 
     function changeStatus(status: Status) {
-        // return () => changeLeaf(id(node), l => l.status = status)
+        return () => changeLeaf(id(node), l => l.status = status)
     }
 
 }
