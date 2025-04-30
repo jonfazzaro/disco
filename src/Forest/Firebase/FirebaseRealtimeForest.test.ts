@@ -14,12 +14,14 @@ describe('The Firebase forest', () => {
                 status: Status.new
             }))
         });
-
-        it.todo('saves serialized tree', () => {
-            let subject = FirebaseRealtimeForest.createNull({data: {}})
-            subject.save(Leaf.createNull({name: "Like", id: "1234567890"}))
-            // expect()
-        });
-
     });
+
+    it('saves a serialized tree', async () => {
+        const input = {name: "Like", id: "1234567890", status: Status.doing}
+        const subject = FirebaseRealtimeForest.createNull({data: {}})
+        await subject.save(Leaf.createNull(input))
+        const data = await subject.load()
+        expect(data).toEqual(expect.objectContaining(input))
+    });
+
 });

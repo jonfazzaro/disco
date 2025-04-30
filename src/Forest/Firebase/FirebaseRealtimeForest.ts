@@ -25,7 +25,7 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     async save(tree: Leaf) {
-        // await this.database.update(tree.serialize())
+        await this.database.update(tree.serialize())
     }
 
     private watch(callback: (leaf: Leaf) => void): void {
@@ -37,10 +37,10 @@ export class FirebaseRealtimeForest implements Forest {
     }
 
     private async get() {
-        // const data = await this.database.get()
-        // if (data !== null)
-        //     return Leaf.deserialize(data)
-        //
+        const data = await this.database.get()
+        if (data !== null)
+            return Leaf.deserialize(data)
+
         return Leaf.create({name: "Goal"})
     }
 
