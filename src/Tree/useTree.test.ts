@@ -56,29 +56,27 @@ describe("useTree", () => {
             }));
         });
 
-        it("selects a leaf when selectLeaf is called", async () => {
-            act(() => {
-                model(hook).selectLeaf(nodeDatum);
+        describe('when selecting a leaf', () => {
+            beforeEach(() => {
+                act(() => {
+                    model(hook).selectLeaf(nodeDatum);
+                });
             });
 
-            expect(model(hook).selectedId).toBe("child456");
+            it("sets the selected ID", () => {
+                expect(model(hook).selectedId).toBe("child456");
+            });
+
+            describe('and then pressing ESC', () => {
+                beforeEach(() => {
+                    pressEsc();
+                });
+
+                it("clears selection", () => {
+                    expect(model(hook).selectedId).toBeNull();
+                });
+            });
         });
-    });
-
-    it("clears selection when Escape key is pressed", async () => {
-        act(() => {
-            model(hook).selectLeaf(nodeDatum);
-        });
-
-        expect(model(hook).selectedId).toBe("child456");
-
-        // Simulate Escape key press
-        act(() => {
-            const escapeEvent = new KeyboardEvent('keydown', {key: 'Escape'});
-            document.dispatchEvent(escapeEvent);
-        });
-
-        expect(model(hook).selectedId).toBeNull();
     });
 
     it("changes a leaf when changeLeaf is called", async () => {
@@ -96,6 +94,7 @@ describe("useTree", () => {
         // Verify forest.save was called
         expect(forest.load()).toEqual(tree);
     });
+
 
     it("does nothing when changing a leaf that doesn't exist", async () => {
         act(() => {
@@ -129,6 +128,13 @@ describe("useTree", () => {
 
         rootNode.children = [childNode];
         tree = rootNode;
+    }
+
+    function pressEsc() {
+        act(() => {
+            const escapeEvent = new KeyboardEvent('keydown', {key: 'Escape'});
+            document.dispatchEvent(escapeEvent);
+        });
     }
 
     function model(hook: any) {
