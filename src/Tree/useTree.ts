@@ -45,8 +45,8 @@ export function useTree(forest: Forest) {
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {
-        // if (root.id === id) return root;
-        // return root.children?.map(r => findLeaf(id, r)).filter(Boolean)[0]
+        if (root.id === id) return root;
+        return root.children?.map(r => findLeaf(id, r)).filter(Boolean)[0]
     }
 
     function toDatum(root: Leaf): RawNodeDatum {
@@ -61,6 +61,6 @@ export function useTree(forest: Forest) {
     }
 
     function bind() {
-        // setTree(l => deepClone(l))
+        setTree(l => deepClone(l))
     }
 }

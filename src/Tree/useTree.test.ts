@@ -77,26 +77,34 @@ describe("The tree hook", () => {
                 });
             });
 
-            it.skip("updates the leaf", async () => {
-                act(() => {
-                    model(hook).changeLeaf("child456", (leaf: Leaf) => {
-                        leaf.name = "Updated Child";
-                        leaf.status = Status.doing;
-                    });
+            describe('in the tree', () => {
+                beforeEach(() => {
+                    act(() => {
+                        model(hook).changeLeaf("child456", (leaf: Leaf) => {
+                            leaf.name = "Updated Child";
+                            leaf.status = Status.doing;
+                        });
+                    }); 
                 });
 
-                // Verify the leaf was changed
-                expect(model(hook).data.children).toEqual(expect.arrayContaining([
-                    expect.objectContaining({
-                        name: "Updated Child",
-                        attributes: {
-                            status: Status.doing
-                        },
-                    })
-                ]));
+                it("updates the leaf in the tree", async () => {
+                    expect(model(hook).data.children).toEqual(expect.arrayContaining([
+                        expect.objectContaining({
+                            name: 'Updated Child',
+                            attributes: {id: 'child456', status: 'doing'},
+                            children: []
+                        })
+                    ]))
+                });
 
-                // Verify forest.save was called
-                expect(forest.load()).toEqual(tree);
+                it("saves the updated tree", async () => {
+                    expect(database.lastSavedData.children).toEqual(expect.arrayContaining([
+                        expect.objectContaining({
+                            name: "Updated Child",
+                            status: Status.doing
+                        })
+                    ]));
+                });
             });
         });
 
@@ -128,14 +136,13 @@ describe("The tree hook", () => {
             status: Status.new
         });
 
-        const childNode = Leaf.createNull({
+        Leaf.createNull({
             name: "Child Node",
             id: "child456",
             parent: rootNode,
             status: Status.new
         });
 
-        rootNode.children = [childNode];
         tree = rootNode;
     }
 
@@ -164,21 +171,5 @@ describe("The tree hook", () => {
         }
     };
 
-    const expectedData = {
-        name: "Root Node",
-        attributes: {
-            id: "root123",
-            status: Status.new
-        },
-        children: [
-            {
-                name: "Child Node",
-                attributes: {
-                    id: "child456",
-                    status: Status.new
-                },
-                children: []
-            }
-        ]
-    };
-});
+})
+;
