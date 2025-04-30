@@ -4,15 +4,14 @@ import {Leaf, Status} from "../core/leaf.ts";
 import {expect} from "vitest";
 
 describe('The toolbar', () => {
-    let hook: any;
-    let tree: Leaf;
-    let lastChangedId: string | null = null;
-    let lastChangeCallback: ((leaf: Leaf) => void) | null = null;
 
     beforeEach(() => {
         arrangeTree();
         arrangeCallbackTools();
-        hook = renderHook(() => useToolbar({node, changeLeaf: changeLeafFn, isSelected: false}));
+        hook = renderHook(() => 
+            useToolbar(
+                {node, changeLeaf: changeLeafFn, isSelected: false}, 
+                fakeConfirmFn));
     });
 
     it('updates leaf status', () => {
@@ -37,6 +36,22 @@ describe('The toolbar', () => {
         )
     });
 
+    describe('when deleting a leaf', () => {
+        it('prompts the user for confirmation', () => {
+            model(hook).deleteLeaf()
+            expect(lastConfirmMessage).toEqual(
+                "Delete Leaf: Are you sure?")
+        });
+
+    });
+
+    let hook: any
+    let tree: Leaf
+    let lastChangedId: string | null
+    let lastChangeCallback: ((leaf: Leaf) => void) | null
+    let lastConfirmMessage: string | null
+    let confirmResult: boolean
+
     function model(hook: any) {
         const {result} = hook;
         return result.current;
@@ -45,6 +60,8 @@ describe('The toolbar', () => {
     function arrangeCallbackTools() {
         lastChangedId = null;
         lastChangeCallback = null;
+        lastConfirmMessage = null;
+        confirmResult = false;
     }
 
     function arrangeTree() {
@@ -55,10 +72,15 @@ describe('The toolbar', () => {
         })
     }
 
-    const changeLeafFn = (id: string, callback: (leaf: any) => void) => {
+    function changeLeafFn(id: string, callback: (leaf: any) => void) {
         lastChangedId = id
         lastChangeCallback = callback
     }
+
+    function fakeConfirmFn(message: string) {
+        lastConfirmMessage = message
+    }
+
 
     const node = {
         name: "Lord Mayor",
