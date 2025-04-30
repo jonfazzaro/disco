@@ -14,9 +14,11 @@ describe("The tree hook", () => {
 
     beforeEach(async () => {
         arrangeTree();
-        database = new NullRealtimeDatabase(tree);
+        database = new NullRealtimeDatabase(tree, true);
         forest = FirebaseRealtimeForest.createNull(database);
-        hook = renderHook(() => useTree(forest));
+        act(() => {
+            hook = renderHook(() => useTree(forest));
+        });
     });
 
     it("initializes with a loading state", () => {
@@ -31,6 +33,9 @@ describe("The tree hook", () => {
 
     describe('when loaded', () => {
         beforeEach(async () => {
+            arrangeTree();
+            database = new NullRealtimeDatabase(tree);
+            forest = FirebaseRealtimeForest.createNull(database);
             await act(async () => {
                 hook = renderHook(() => useTree(forest));
             });
@@ -84,7 +89,7 @@ describe("The tree hook", () => {
                             leaf.name = "Updated Child";
                             leaf.status = Status.doing;
                         });
-                    }); 
+                    });
                 });
 
                 it("updates the leaf in the tree", () => {
@@ -112,7 +117,7 @@ describe("The tree hook", () => {
             name: "Root Node",
             attributes: {
                 id: "root123",
-                status: Status.new,
+                status: Status.doing,
             },
             children: expect.arrayContaining([
                 expect.objectContaining({
@@ -132,7 +137,6 @@ describe("The tree hook", () => {
         const rootNode = Leaf.createNull({
             name: "Root Node",
             id: "root123",
-            status: Status.new
         });
 
         Leaf.createNull({
@@ -142,6 +146,7 @@ describe("The tree hook", () => {
             status: Status.new
         });
 
+        rootNode.status = Status.doing
         tree = rootNode;
     }
 
