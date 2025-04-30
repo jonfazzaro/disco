@@ -19,7 +19,7 @@ describe("The tree hook", () => {
         hook = renderHook(() => useTree(forest));
     });
 
-    it.only("initializes with a loading state", () => {
+    it("initializes with a loading state", () => {
         expect(model(hook).data).toEqual({
             name: "Loading...",
             attributes: expect.objectContaining({
@@ -29,7 +29,7 @@ describe("The tree hook", () => {
         })
     });
 
-    describe.only('when loaded', () => {
+    describe('when loaded', () => {
         beforeEach(async () => {
             await act(async () => {
                 hook = renderHook(() => useTree(forest));
@@ -65,9 +65,9 @@ describe("The tree hook", () => {
         describe('when changing a leaf', () => {
 
             describe("that doesn't exist", () => {
-                it("does nothing", async () => {
-                    await act(async () => {
-                        await model(hook).changeLeaf("nonexistent", (leaf: Leaf) => {
+                it("does nothing", () => {
+                    act(() => {
+                        model(hook).changeLeaf("nonexistent", (leaf: Leaf) => {
                             leaf.name = "This won't work";
                         });
                     });
@@ -87,7 +87,7 @@ describe("The tree hook", () => {
                     }); 
                 });
 
-                it("updates the leaf in the tree", async () => {
+                it("updates the leaf in the tree", () => {
                     expect(model(hook).data.children).toEqual(expect.arrayContaining([
                         expect.objectContaining({
                             name: 'Updated Child',
@@ -97,7 +97,7 @@ describe("The tree hook", () => {
                     ]))
                 });
 
-                it("saves the updated tree", async () => {
+                it("saves the updated tree", () => {
                     expect(database.lastSavedData.children).toEqual(expect.arrayContaining([
                         expect.objectContaining({
                             name: "Updated Child",
@@ -129,7 +129,6 @@ describe("The tree hook", () => {
 
 
     function arrangeTree() {
-        // Create a root node with a child
         const rootNode = Leaf.createNull({
             name: "Root Node",
             id: "root123",
