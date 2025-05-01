@@ -4,16 +4,56 @@ header {
     justify-content: space-between;
     padding: 1rem;
     margin: 0;
-    
-    h1 {
-        font-family: 'Madie Roger', sans-serif;
-        font-size: 3rem;
-        color: var(--header-text-color);
-        margin: 0;
+
+    .logo {
+        h1 {
+            font-family: 'Madie Roger', sans-serif;
+            color: var(--header-text-color);
+            margin: 0;
+        }
+
+        small {
+            display: none;
+        }
     }
 
-    small {
-        margin-left: 4rem;
+    .share {
+        display: none;
+    }
+
+    button {
+        background-color: transparent;
+        border: none;
+        color: var(--text-color);
+    }
+
+}
+
+@media (prefers-color-scheme: dark) {
+    header {
+        button {
+            color: var(--dark-text-color);
+        }
+    }
+}
+
+@media (min-width: 770px) {
+    header {
+
+        .logo {
+            h1 {
+                font-size: 3rem;
+            }
+
+            small {
+                display: block;
+                margin-left: 4rem;
+            }
+        }
+
+        .share {
+            display: block;
+        }
     }
 
     button {
@@ -33,7 +73,7 @@ header {
     }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (min-width: 770px) and (prefers-color-scheme: dark) {
     header {
         button {
             background-color: #555;
@@ -47,4 +87,3 @@ header {
         }
     }
 }
-    

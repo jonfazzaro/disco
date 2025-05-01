@@ -14,7 +14,7 @@ function App() {
                 <h1>🪩 Disco</h1>
                 <small>for <a href="https://www.industriallogic.com/blog/discovery-trees/">Discovery Trees</a></small>
             </div>
-            <p>Share this URL ☝️ to collaborate!</p>
+            <p className="share">Share this URL ☝️ to collaborate!</p>
             <button onClick={_e => keyMaster.newTree()}>🌳 New Tree</button>
         </header>
         <Tree forest={forest}/>
