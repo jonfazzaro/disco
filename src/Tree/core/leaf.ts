@@ -1,13 +1,10 @@
-import {IdGenerator, NullIdGenerator, RealIdGenerator} from "../../IdGenerator.ts";
+import {RealIdGenerator} from "../../IdGenerator.ts";
 
 export interface CreateLeaf {
     name: string
     parent?: Leaf | null
     status?: Status | undefined
-}
-
-export interface CreateNullLeaf extends CreateLeaf {
-    id: string
+    id?: string | null
 }
 
 export interface SerializedLeaf {
@@ -24,16 +21,12 @@ export class Leaf {
     parent: Leaf | null = null;
     private _status: Status = Status.new;
 
-    static create({name, parent, status}: CreateLeaf) {
-        return new Leaf(name, parent, status)
+    static create({name, parent, status, id}: CreateLeaf) {
+        return new Leaf(name, parent, status, id)
     }
-
-    static createNull({name, parent, status, id}: CreateNullLeaf) {
-        return new Leaf(name, parent, status, new NullIdGenerator(id))
-    }
-
-    private constructor(name: string, parent: Leaf | null = null, status: Status | undefined, idGenerator: IdGenerator = new RealIdGenerator()) {
-        this.id = idGenerator.nextId();
+    
+    private constructor(name: string, parent: Leaf | null = null, status: Status | undefined, id: string | null | undefined = null) {
+        this.id = id || this.nextId();
         this.name = name;
         this.parent = parent
         this.status = status || Status.new;
@@ -65,6 +58,10 @@ export class Leaf {
     delete() {
         this.status = Status.canceled;
         this.pick();
+    }
+
+    private nextId() {
+        return new RealIdGenerator().nextId();
     }
 
     private inheritCanceled() {
@@ -109,7 +106,8 @@ export class Leaf {
     }
 
     static deserialize(data: SerializedLeaf) {
-        const leaf = Leaf.createNull(data);
+        let {name, parent, status, id}: CreateLeaf = data;
+        const leaf = Leaf.create({name, parent, status, id}) as Leaf;
         leaf.children = data.children?.map(Leaf.deserialize) || [];
         leaf.children.forEach(c => c.parent = leaf);
         return leaf;

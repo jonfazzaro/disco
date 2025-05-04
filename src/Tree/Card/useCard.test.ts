@@ -58,11 +58,7 @@ describe('The card hook', () => {
 
     function arrangeCallbackTools() {
         lastChangeCallback = null;
-        leaf = Leaf.createNull({
-            name: "Lord Mayor",
-            id: "1234567890",
-            status: Status.new
-        });
+        leaf = Leaf.create({name: "Lord Mayor", status: Status.new, id: "1234567890"}) as Leaf;
     }
 
     function arrangeNameRef(value: object | null= {

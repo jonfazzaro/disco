@@ -242,10 +242,10 @@ describe('The leaf', () => {
                         "status": "new",
                     }
 
-                    const expected = Leaf.createNull({
-                        "id": "c9d6431d-6166-4ec3-9485-0db974753299",
-                        "name": "Clean the house",
-                        "status": Status.new,
+                    const expected = Leaf.create({
+                        id: "c9d6431d-6166-4ec3-9485-0db974753299",
+                        name: "Clean the house",
+                        status: Status.new,
                         parent: null
                     });
 
@@ -258,19 +258,26 @@ describe('The leaf', () => {
     });
 
     function arrangeLeaves() {
-        parent = Leaf.createNull({name: "Clean the house", id: "c9d6431d-6166-4ec3-9485-0db974753299"})
-        leaf = Leaf.createNull({name: "dishes", parent: parent, id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"});
-        sibling = Leaf.createNull({
+        parent = Leaf.create({
+            name: "Clean the house",
+            id: "c9d6431d-6166-4ec3-9485-0db974753299"
+        })
+        leaf = Leaf.create({
+            name: "dishes",
+            parent,
+            id: "2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e"
+        })
+        sibling = Leaf.create({
             name: "do the laundry",
-            parent: parent,
+            parent,
             id: "6985e31c-2cd1-492d-be57-96a295869d8a"
-        });
-        grandchild = Leaf.createNull({
+        })
+        grandchild = Leaf.create({
             name: "separate delicates",
             parent: leaf,
             id: "ba3de1d3-3ab0-4934-aea4-3fcc719ef174"
-        });
-        cousin = Leaf.createNull({
+        })
+        cousin = Leaf.create({
             name: "separate colors",
             parent: leaf,
             status: Status.doing,

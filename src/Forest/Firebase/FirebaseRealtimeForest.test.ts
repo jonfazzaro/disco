@@ -28,7 +28,7 @@ describe('The Firebase forest', () => {
         }
 
         beforeEach(async () => {
-            await subject.save(Leaf.createNull(root))
+            await subject.save(Leaf.create(root) as Leaf)
         });
 
         it('saves a serialized root', async () => {

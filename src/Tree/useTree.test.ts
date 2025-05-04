@@ -134,17 +134,9 @@ describe("The tree hook", () => {
 
 
     function arrangeTree() {
-        const rootNode = Leaf.createNull({
-            name: "Root Node",
-            id: "root123",
-        });
+        const rootNode = Leaf.create({name: "Root Node", id: "root123"})
 
-        Leaf.createNull({
-            name: "Child Node",
-            id: "child456",
-            parent: rootNode,
-            status: Status.new
-        });
+        Leaf.create({name: "Child Node", parent: rootNode, status: Status.new, id: "child456"})
 
         rootNode.status = Status.doing
         tree = rootNode;
@@ -176,4 +168,3 @@ describe("The tree hook", () => {
     };
 
 })
-;
