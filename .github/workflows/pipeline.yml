@@ -3,22 +3,22 @@
 
 name: Deploy to Firebase Hosting on push
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: |
-          echo "${{ secrets.ENV_FILE }}" | base64 -d > .env
-          npm install 
-          npm test 
-          npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FAZZARO_DISCO }}
-          channelId: live
-          projectId: fazzaro-disco
+    build_and_deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - run: |
+                  echo "${{ secrets.ENV_FILE }}" | base64 -d > .env
+                  npm install 
+                  npm test 
+                  npm run build
+            - uses: FirebaseExtended/action-hosting-deploy@v0
+              with:
+                  repoToken: ${{ secrets.GITHUB_TOKEN }}
+                  firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FAZZARO_DISCO }}
+                  channelId: live
+                  projectId: fazzaro-disco

@@ -15,7 +15,7 @@
         border: none;
         outline: none;
         resize: none;
-        overflow: hidden; 
+        overflow: hidden;
     }
 
     &.new {
@@ -50,14 +50,11 @@
         }
     }
 
-
     &.blocked {
         background-color: var(--blocked-leaf-background);
 
         &.blocked {
-            border: 1px solid var(--blocked-leaf-border);       
+            border: 1px solid var(--blocked-leaf-border);
         }
     }
-
 }
-

@@ -2,12 +2,12 @@
 
 :root {
     font-family: Helvetica, Arial, sans-serif;
-    
+
     --link-color: orangered;
     --background: white;
     --header-text-color: orange;
     --text-color: #333;
-    
+
     --dark-text-color: white;
     --dark-link-color: darkorange;
     --dark-background: #222;
@@ -15,19 +15,19 @@
     --toolbar-background: white;
     --toolbar-border: #ccc;
     --toolbar-shadow: #ccc;
-    
+
     --new-leaf-background: #ffff86;
     --new-leaf-border: #7a7a40;
-    
+
     --doing-leaf-background: #b8d7fa;
     --doing-leaf-border: #17455d;
-    
+
     --done-leaf-background: #b0f399;
     --done-leaf-border: #3f6c1c;
-    
+
     --canceled-leaf-background: #ddd;
     --canceled-leaf-border: #555;
-    
+
     --blocked-leaf-background: #f587ac;
     --blocked-leaf-border: #834b63;
 
@@ -57,7 +57,7 @@ body {
         background-color: var(--dark-background);
         color: var(--dark-text-color);
     }
-    
+
     a {
         color: var(--dark-link-color);
     }
@@ -65,7 +65,7 @@ body {
     .tree {
         background-color: var(--dark-background);
     }
-    
+
     .rd3t-link {
         stroke: var(--dark-text-color) !important;
     }

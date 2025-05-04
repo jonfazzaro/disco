@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import App from './App/App.tsx'
 import './index.css'
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app'
+import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -15,14 +15,14 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
     databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
-};
+}
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
- getAnalytics(app);
+const app = initializeApp(firebaseConfig)
+getAnalytics(app)
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+    <StrictMode>
+        <App />
+    </StrictMode>,
 )

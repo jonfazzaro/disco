@@ -1,36 +1,36 @@
-import {Leaf, Status} from "./core/leaf.ts";
-import {useEffect, useState} from "react";
-import {RawNodeDatum, TreeNodeDatum} from "react-d3-tree";
-import {deepClone} from "./deepClone.ts";
-import {useKeyPress} from "../useKeyPress.ts";
-import {id} from "./node.ts";
-import {Forest} from "../Forest/Forest.ts";
+import { Leaf, Status } from './core/leaf.ts'
+import { useEffect, useState } from 'react'
+import { RawNodeDatum, TreeNodeDatum } from 'react-d3-tree'
+import { deepClone } from './deepClone.ts'
+import { useKeyPress } from '../useKeyPress.ts'
+import { id } from './node.ts'
+import { Forest } from '../Forest/Forest.ts'
 
 export interface TreeViewModel {
-    data: RawNodeDatum;
-    changeLeaf: (id: string, update: (leaf: Leaf) => void) => void;
-    selectedId: string | null;
-    selectLeaf: (datum: TreeNodeDatum) => void;
+    data: RawNodeDatum
+    changeLeaf: (id: string, update: (leaf: Leaf) => void) => void
+    selectedId: string | null
+    selectLeaf: (datum: TreeNodeDatum) => void
 }
 
 export function useTree(forest: Forest) {
-    const [tree, setTree] = useState(Leaf.create({name: "Loading...", status: Status.canceled}));
-    const [selectedId, setSelectedId] = useState<string | null>(null);
-    
+    const [tree, setTree] = useState(Leaf.create({ name: 'Loading...', status: Status.canceled }))
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+
     useEffect(() => {
         forest.load(setTree).then(setTree)
     }, [])
 
-    useKeyPress({key:'Escape'}, () => {
+    useKeyPress({ key: 'Escape' }, () => {
         setSelectedId(null)
-    });
+    })
 
     return <TreeViewModel>{
         data: toDatum(tree),
         changeLeaf,
         selectedId,
-        selectLeaf
-    };
+        selectLeaf,
+    }
 
     function selectLeaf(datum: TreeNodeDatum) {
         setSelectedId(id(datum))
@@ -45,7 +45,7 @@ export function useTree(forest: Forest) {
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {
-        if (root.id === id) return root;
+        if (root.id === id) return root
         return root.children?.map(r => findLeaf(id, r)).filter(Boolean)[0]
     }
 
@@ -54,9 +54,9 @@ export function useTree(forest: Forest) {
             name: root.name,
             attributes: {
                 id: root.id,
-                status: root.status
+                status: root.status,
             },
-            children: root.children?.map(toDatum)
+            children: root.children?.map(toDatum),
         }
     }
 

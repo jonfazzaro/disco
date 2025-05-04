@@ -3,10 +3,10 @@
     border: 1px solid var(--toolbar-border);
     border-radius: 5px;
     box-shadow: 0 3px 5px var(--toolbar-shadow);
-    
+
     width: 215px;
     height: 25px;
-    
+
     padding: 5px;
     margin: 5px;
 
@@ -24,7 +24,7 @@
         height: 20px;
         padding: 0;
     }
-    
+
     button.delete {
         justify-self: end;
         background-color: transparent;
@@ -72,5 +72,4 @@
             }
         }
     }
-
 }

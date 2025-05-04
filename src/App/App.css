@@ -26,7 +26,6 @@ header {
         border: none;
         color: var(--text-color);
     }
-
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,7 +38,6 @@ header {
 
 @media (min-width: 770px) {
     header {
-
         .logo {
             h1 {
                 font-size: 3rem;

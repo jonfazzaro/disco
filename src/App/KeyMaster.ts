@@ -1,26 +1,26 @@
-import {IdGenerator, NullIdGenerator, RealIdGenerator} from "../IdGenerator.ts";
+import { IdGenerator, NullIdGenerator, RealIdGenerator } from '../IdGenerator.ts'
 
 interface CreateNullKeyMaster {
-    currentPath: string;
-    nextId: string;
+    currentPath: string
+    nextId: string
 }
 
 export class KeyMaster {
-    static createNull({currentPath, nextId}: CreateNullKeyMaster): KeyMaster {
-        return new KeyMaster(new NullLocation(currentPath), new NullIdGenerator(nextId));
+    static createNull({ currentPath, nextId }: CreateNullKeyMaster): KeyMaster {
+        return new KeyMaster(new NullLocation(currentPath), new NullIdGenerator(nextId))
     }
 
     static create() {
-        return new KeyMaster();
+        return new KeyMaster()
     }
 
     private constructor(
         private readonly location: Location = new WindowLocation(),
-        private readonly idGenerator: IdGenerator = new RealIdGenerator()
-    ) { }
+        private readonly idGenerator: IdGenerator = new RealIdGenerator(),
+    ) {}
 
     key(): string {
-        if (this.noKeyInUrl()) this.newTree();
+        if (this.noKeyInUrl()) this.newTree()
         return this.getKeyFromUrl()
     }
 
@@ -29,11 +29,11 @@ export class KeyMaster {
     }
 
     private noKeyInUrl() {
-        return this.location.path() === '/';
+        return this.location.path() === '/'
     }
 
     private getKeyFromUrl() {
-        return this.location.path().substring(1);
+        return this.location.path().substring(1)
     }
 }
 
@@ -47,15 +47,14 @@ class WindowLocation implements Location {
     path(): string {
         return window.location.pathname
     }
-    
+
     go(url: string) {
         window.location.href = url
     }
 }
 
 class NullLocation implements Location {
-    constructor(public currentPath: string) {
-    }
+    constructor(public currentPath: string) {}
 
     path() {
         return this.currentPath

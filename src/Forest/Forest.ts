@@ -1,6 +1,6 @@
-import {Leaf} from "../Tree/core/leaf.ts";
+import { Leaf } from '../Tree/core/leaf.ts'
 
 export interface Forest {
-    load(callback?: (leaf:Leaf) => void): Promise<Leaf>
+    load(callback?: (leaf: Leaf) => void): Promise<Leaf>
     save(tree: Leaf): Promise<void>
 }
