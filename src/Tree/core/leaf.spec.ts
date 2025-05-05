@@ -2,7 +2,7 @@ import { Leaf, SerializedLeaf, Status } from './leaf.ts'
 import { expect } from 'vitest'
 
 describe('The leaf', () => {
-    let leaf: Leaf, parent: Leaf, grandchild: Leaf, cousin: Leaf
+    let leaf: Leaf, parent: Leaf, sibling: Leaf, grandchild: Leaf, cousin: Leaf
 
     beforeEach(() => {
         arrangeLeaves()
@@ -173,6 +173,11 @@ describe('The leaf', () => {
             name: 'dishes',
             parent,
             id: '2f9fc7e0-6c0d-4d6c-b682-7f8e31d0d41e',
+        })
+        sibling = Leaf.create({
+            name: 'do the laundry',
+            parent,
+            id: '6985e31c-2cd1-492d-be57-96a295869d8a',
         })
         grandchild = Leaf.create({
             name: 'separate delicates',
