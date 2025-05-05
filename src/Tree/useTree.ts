@@ -1,4 +1,4 @@
-import { Leaf, Status } from './core/leaf.ts'
+import { Leaf, Status } from '../Leaf/leaf.ts'
 import { useEffect, useState } from 'react'
 import { RawNodeDatum, TreeNodeDatum } from 'react-d3-tree'
 import { deepClone } from './deepClone.ts'

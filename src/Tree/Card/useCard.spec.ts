@@ -1,4 +1,4 @@
-import { Leaf, Status } from '../core/leaf.ts'
+import { Leaf, Status } from '../../Leaf/leaf.ts'
 import { renderHook } from '@testing-library/react'
 import { useCard } from './useCard.ts'
 import * as React from 'react'

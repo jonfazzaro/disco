@@ -1,4 +1,4 @@
-import { Leaf, Status } from '../core/leaf.ts'
+import { Leaf, Status } from '../../Leaf/leaf.ts'
 import { CardProps } from '../Card/Card.tsx'
 import { id } from '../node.ts'
 

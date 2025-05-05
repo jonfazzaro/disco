@@ -1,6 +1,6 @@
 import { FirebaseRealtimeForest } from './FirebaseRealtimeForest.ts'
 import { NullRealtimeDatabase } from './NullRealtimeDatabase.ts'
-import { Leaf, SerializedLeaf, Status } from '../../Tree/core/leaf.ts'
+import { Leaf, SerializedLeaf, Status } from '../../Leaf/leaf.ts'
 
 describe('The Firebase forest', () => {
     let subject: FirebaseRealtimeForest

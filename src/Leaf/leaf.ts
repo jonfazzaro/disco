@@ -1,4 +1,4 @@
-import { RealIdGenerator } from '../../IdGenerator.ts'
+import { RealIdGenerator } from '../IdGenerator.ts'
 
 export interface CreateLeaf {
     name: string

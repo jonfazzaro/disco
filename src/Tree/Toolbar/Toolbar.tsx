@@ -1,4 +1,4 @@
-import { Status } from '../core/leaf.ts'
+import { Status } from '../../Leaf/leaf.ts'
 import { useToolbar } from './useToolbar.ts'
 import { CardProps } from '../Card/Card.tsx'
 import './Toolbar.css'

@@ -1,6 +1,6 @@
 import { act, renderHook, RenderHookResult } from '@testing-library/react'
 import { TreeViewModel, useTree } from './useTree.ts'
-import { Leaf, Status } from './core/leaf'
+import { Leaf, Status } from '../Leaf/leaf'
 import { TreeNodeDatum } from 'react-d3-tree'
 import { FirebaseRealtimeForest } from '../Forest/Firebase/FirebaseRealtimeForest'
 import { NullRealtimeDatabase } from '../Forest/Firebase/NullRealtimeDatabase.ts'

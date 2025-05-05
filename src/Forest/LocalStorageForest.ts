@@ -1,4 +1,4 @@
-import { Leaf } from '../Tree/core/leaf.ts'
+import { Leaf } from '../Leaf/leaf.ts'
 import { Forest } from './Forest.ts'
 
 export class LocalStorageForest implements Forest {

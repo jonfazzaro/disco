@@ -1,4 +1,4 @@
-import { Leaf } from '../../Tree/core/leaf.ts'
+import { Leaf } from '../../Leaf/leaf.ts'
 import { Forest } from '../Forest.ts'
 import { RealtimeDatabase } from './RealtimeDatabase.ts'
 import { NullRealtimeDatabase } from './NullRealtimeDatabase.ts'

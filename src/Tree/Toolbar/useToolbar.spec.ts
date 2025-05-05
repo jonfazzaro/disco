@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { useToolbar } from './useToolbar.ts'
-import { Leaf, Status } from '../core/leaf.ts'
+import { Leaf, Status } from '../../Leaf/leaf.ts'
 
 describe('The toolbar', () => {
     beforeEach(() => {

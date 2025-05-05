@@ -1,5 +1,5 @@
 import { TreeNodeDatum } from 'react-d3-tree'
-import { Leaf } from '../core/leaf.ts'
+import { Leaf } from '../../Leaf/leaf.ts'
 import './Card.css'
 import { useCard } from './useCard.ts'
 
