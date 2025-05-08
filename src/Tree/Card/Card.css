@@ -16,6 +16,7 @@
         outline: none;
         resize: none;
         overflow: hidden;
+        font-family: inherit;
     }
 
     &.new {
