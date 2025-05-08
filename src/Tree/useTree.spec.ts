@@ -21,6 +21,10 @@ describe('The tree hook', () => {
         })
     })
 
+    it('does not change the title', () => {
+        expect(document.title).toEqual('Disco / Loading...')
+    })
+
     it('initializes with a loading state', () => {
         expect(model(hook).data).toEqual({
             name: 'Loading...',
@@ -43,6 +47,10 @@ describe('The tree hook', () => {
 
         it('loads the tree from the forest', async () => {
             expect(model(hook).data).toEqual(loadedData)
+        })
+
+        it('sets the title to the name of the root', () => {
+            expect(document.title).toEqual('Disco / Root Node')
         })
 
         describe('when selecting a leaf', () => {

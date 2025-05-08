@@ -21,6 +21,10 @@ export function useTree(forest: Forest) {
         forest.load(setTree).then(setTree)
     }, [])
 
+    useEffect(() => {
+        document.title = `Disco / ${tree.name}`
+    }, [tree])
+
     useKeyPress({ key: 'Escape' }, () => {
         setSelectedId(null)
     })
