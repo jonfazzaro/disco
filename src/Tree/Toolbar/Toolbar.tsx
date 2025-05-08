@@ -25,7 +25,7 @@ export function Toolbar(props: CardProps) {
                     onClick={changeStatus(Status.blocked)}></button>
             </div>
             <button className="delete" title="Delete leaf" onClick={deleteLeaf}>
-                ❌
+                🗑️
             </button>
         </div>
     )
