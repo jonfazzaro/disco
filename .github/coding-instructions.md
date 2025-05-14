@@ -102,7 +102,9 @@
 - Use seams to isolate hard-to-specify code during refactoring.
 
 ## Executable Specifications
-- Write executable specifications instead of tests to express desired behavior.
+- Create specifications BEFORE implementing any new feature or modification. 
+  - You may also know this approach as Test-Driven Development, or TDD.
+  - I don't want the resulting code to use the terminology of testing, though--this is specification, conceptually.
 - Create a failing specification before implementing functionality.
 - Pass the specification with the simplest possible implementation.
 - Design the code that passed after the specification passes.
@@ -110,7 +112,7 @@
 - Use descriptive specification names that document the expected behavior.
 - Create focused specifications with a single logical expectation.
 - Never use mocking frameworks; create Control objects instead.
-- Implement Control versions of dependencies (e.g., `ControlRecipeRepository` implementing `RecipeRepository`).
+- Implement Control versions of dependencies (e.g., `ControlledRecipeRepository` implementing `RecipeRepository`).
 - Design Control objects to have predefined inputs/outputs configurable by specifications.
 - Expose side effects in Control objects as inspectable properties (e.g., `loggedOutput`).
 - Define Control implementations alongside production code to enable runtime substitution.
