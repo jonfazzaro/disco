@@ -5,6 +5,7 @@ import { deepClone } from './deepClone.ts'
 import { useKeyPress } from '../useKeyPress.ts'
 import { id } from './node.ts'
 import { Forest } from '../Forest/Forest.ts'
+import { useHistory } from '../useHistory.ts'
 
 export interface TreeViewModel {
     data: RawNodeDatum
@@ -16,7 +17,7 @@ export interface TreeViewModel {
 export function useTree(forest: Forest) {
     const [tree, setTree] = useState(Leaf.create({ name: 'Loading...', status: Status.canceled }))
     const [selectedId, setSelectedId] = useState<string | null>(null)
-    const [history, setHistory] = useState<Leaf[]>([])
+    const { writeHistory: addToHistory, undo: undoHistory } = useHistory<Leaf>()
 
     useEffect(() => {
         forest.load(setTree).then(setTree)
@@ -42,15 +43,14 @@ export function useTree(forest: Forest) {
     function selectLeaf(datum: TreeNodeDatum) {
         setSelectedId(id(datum))
     }
-
-    function writeHistory() {
-        setHistory(prev => [...prev, deepClone(tree)])
-    }
-
     function changeLeaf(id: string, update: (leaf: Leaf) => void) {
         const leaf = findLeaf(id, tree)
         if (!leaf) return
-        writeHistory()
+
+        // Create a deep clone of the current tree before making changes
+        const originalTree = Leaf.deserialize(tree.serialize())
+        addToHistory(originalTree)
+
         update(leaf)
         bind()
         return save(tree)
@@ -65,16 +65,12 @@ export function useTree(forest: Forest) {
     }
 
     function undo() {
-        if (history.length === 0) return
+        const previousState = undoHistory()
+        if (!previousState) return
 
-        const previousState = deepClone(history[history.length - 1])
+        // Use the previous state from history to restore the tree
         setTree(previousState)
-        popHistory()
         return save(previousState)
-    }
-
-    function popHistory() {
-        setHistory(prev => prev.slice(0, -1))
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {
