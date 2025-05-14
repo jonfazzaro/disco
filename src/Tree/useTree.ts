@@ -43,35 +43,38 @@ export function useTree(forest: Forest) {
         setSelectedId(id(datum))
     }
 
+    function writeHistory() {
+        setHistory(prev => [...prev, deepClone(tree)])
+    }
+
     function changeLeaf(id: string, update: (leaf: Leaf) => void) {
         const leaf = findLeaf(id, tree)
         if (!leaf) return
-
-        // Save the current state to history before making changes
-        const clonedTree = deepClone(tree)
-        setHistory(prev => [...prev, clonedTree])
-
+        writeHistory()
         update(leaf)
         bind()
-        return forest.save(tree).catch(console.error)
+        return save(tree)
+    }
+
+    async function save(tree: Leaf) {
+        try {
+            return await forest.save(tree)
+        } catch (message) {
+            return console.error(message)
+        }
     }
 
     function undo() {
-        if (history.length === 0) {
-            return
-        }
+        if (history.length === 0) return
 
-        // Get the last state from history
         const previousState = deepClone(history[history.length - 1])
-
-        // Update the tree with the previous state
         setTree(previousState)
+        popHistory()
+        return save(previousState)
+    }
 
-        // Remove the used state from history
+    function popHistory() {
         setHistory(prev => prev.slice(0, -1))
-
-        // Save the restored state
-        return forest.save(previousState).catch(console.error)
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {
