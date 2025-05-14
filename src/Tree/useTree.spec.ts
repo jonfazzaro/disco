@@ -121,6 +121,35 @@ describe('The tree hook', () => {
                         ]),
                     )
                 })
+
+                describe('and then pressing Ctrl+Z', () => {
+                    beforeEach(() => {
+                        pressCtrlZ()
+                    })
+
+                    it('restores the previous state', () => {
+                        expect(model(hook).data.children).toEqual(
+                            expect.arrayContaining([
+                                expect.objectContaining({
+                                    name: 'Child Node',
+                                    attributes: { id: 'child456', status: 'new' },
+                                    children: [],
+                                }),
+                            ]),
+                        )
+                    })
+
+                    it('saves the restored tree', () => {
+                        expect(database.lastSavedData.children).toEqual(
+                            expect.arrayContaining([
+                                expect.objectContaining({
+                                    name: 'Child Node',
+                                    status: Status.new,
+                                }),
+                            ]),
+                        )
+                    })
+                })
             })
         })
 
@@ -156,6 +185,13 @@ describe('The tree hook', () => {
         act(() => {
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' })
             document.dispatchEvent(escapeEvent)
+        })
+    }
+
+    function pressCtrlZ() {
+        act(() => {
+            const ctrlZEvent = new KeyboardEvent('keydown', { key: 'z', ctrlKey: true })
+            document.dispatchEvent(ctrlZEvent)
         })
     }
 

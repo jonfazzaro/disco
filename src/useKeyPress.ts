@@ -7,7 +7,7 @@ export function useKeyPress({ key, ctrl = false }: { key: string; ctrl?: boolean
         return () => {
             document.removeEventListener('keydown', handleKeyDown)
         }
-    }, [])
+    }, [key, ctrl, action])
 
     function handleKeyDown(event: KeyboardEvent) {
         if (event.key === key && (event.ctrlKey === ctrl || event.metaKey === ctrl)) {
