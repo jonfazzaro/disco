@@ -1,24 +1,18 @@
 ## Design & Structure
-- Create classes that do one thing and do it well (Single Responsibility Principle).
-- Keep methods under 5-10 lines of code; if longer, extract new methods.
-- Name variables, methods, and classes after their intent, not implementation.
-- Favor composition over inheritance to promote flexibility.
-- Design interfaces before implementations to focus on behavior, not details.
-- Create immutable objects when possible to reduce side effects.
-- Use dependency injection for testability and loose coupling.
-- Prefer small, focused classes over large "God" classes.
-- Extract complex conditional logic into well-named methods or strategy objects.
-- Implement domain objects that express the ubiquitous language of the business.
-- Replace primitive obsession with value objects that encapsulate behavior.
-- Use TDD's "rule of three" before generalizing solutions.
-- Apply Tell-Don't-Ask principle to encapsulate behavior with data.
 - Place code that changes together in the same module/class.
 - Separate code that changes for different reasons.
-- Design interfaces with Control implementation in mind for specification scenarios.
+- Use dependency injection for testability and loose coupling.
+- Keep methods to about 5 lines of code; if longer, extract new methods.
+- Favor composition over inheritance to promote flexibility.
+- Create immutable values and objects when possible to reduce side effects.
+- Extract complex conditional logic into well-named methods or strategy objects.
+- Implement domain objects that express the ubiquitous language of the business.
+- Replace "primitive obsession" with value objects that encapsulate behavior.
+- Factor out duplicated code when there are at least three repetitions of the same code or pattern.
+- Apply Tell-Don't-Ask principle to encapsulate behavior with data.
 
 ### Architecture
-- Organize code by domain concepts, not technical layers ("Products" and "Orders", not "UI" and "Services").
-- Let the codebase structure "scream" the application's purpose through domain-focused organization.
+- Organize code files and directories first by domain concepts, not technical layers ("Products" and "Orders", not "UI" and "Services").
 - Place all related code (UI, services, repositories) for a domain concept in the same module.
 - Create clear boundaries between bounded contexts in the domain.
 - Apply hexagonal/ports and adapters architecture to isolate core domain from infrastructure.
@@ -45,7 +39,6 @@
 - Avoid excessive acronyms and abbreviations that sacrifice clarity.
 - Use shorter names for variables with shorter scopes; longer, more descriptive names for wider scopes.
 - Give modules/classes/functions with longer scopes shorter names; those with shorter scopes longer, more specific names.
-- Choose specific names that precisely communicate the variable or function's purpose.
 - Use domain terminology consistently in naming to reinforce the ubiquitous language.
 - Include units in variable names when they represent physical quantities.
 - Avoid generic names like "data", "info", or "value" without specific context.
@@ -109,6 +102,7 @@
 - Pass the specification with the simplest possible implementation.
 - Design the code that passed after the specification passes.
 - The work isn't done if the specs aren't passing.
+- The work isn't done if the specs don't fully describe the behavior required.
 - Focus on specifying behavior, not implementation details.
 - Use descriptive specification names that document the expected behavior.
 - Create focused specifications with a single logical expectation.
@@ -122,9 +116,9 @@
 - Specify behavior at boundaries and edge cases explicitly.
 - Write the specification first to guide implementation.
 - Separate User Specifications (whole system) from Code Specifications (isolated components).
-- Triangulate uncertain implementations with multiple specifications.
+- Use multiple specifications to triangulate complex behaviors.
 
-### Specification Best Practices
+### Specification Design
 - Name specifications as executable documentation: "should_perform_action_when_condition".
 - Specify behavior rather than implementation details.
 - Use Control objects to isolate dependencies rather than test doubles.
@@ -142,7 +136,6 @@
 - Apply the FIRST principles to specifications: Fast, Isolated, Repeatable, Self-verifying, Timely.
 - Structure User Specifications to validate the entire system behavior.
 - Use Code Specifications for isolated components and units.
-
 
 ### Specification Structure and Naming
 - Use a describe/it nested structure to make complex combinations of conditions simpler to navigate.

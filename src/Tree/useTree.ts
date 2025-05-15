@@ -17,7 +17,7 @@ export interface TreeViewModel {
 export function useTree(forest: Forest) {
     const [tree, setTree] = useState(Leaf.create({ name: 'Loading...', status: Status.canceled }))
     const [selectedId, setSelectedId] = useState<string | null>(null)
-    const { writeHistory: addToHistory, undo: undoHistory } = useHistory<Leaf>()
+    const { writeHistory, previous } = useHistory<Leaf>()
 
     useEffect(() => {
         forest.load(setTree).then(setTree)
@@ -46,11 +46,7 @@ export function useTree(forest: Forest) {
     function changeLeaf(id: string, update: (leaf: Leaf) => void) {
         const leaf = findLeaf(id, tree)
         if (!leaf) return
-
-        // Create a deep clone of the current tree before making changes
-        const originalTree = Leaf.deserialize(tree.serialize())
-        addToHistory(originalTree)
-
+        writeHistory(deepClone(tree))
         update(leaf)
         bind()
         return save(tree)
@@ -65,12 +61,13 @@ export function useTree(forest: Forest) {
     }
 
     function undo() {
-        const previousState = undoHistory()
-        if (!previousState) return
+        return restore(previous())
+    }
 
-        // Use the previous state from history to restore the tree
-        setTree(previousState)
-        return save(previousState)
+    function restore(state?: Leaf) {
+        if (!state) return
+        setTree(state)
+        return save(state)
     }
 
     function findLeaf(id: string, root: Leaf): Leaf | undefined {

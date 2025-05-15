@@ -1,28 +1,26 @@
 import { useState } from 'react'
 import { deepClone } from './Tree/deepClone.ts'
 
-export interface HistoryHook<T> {
+export interface HistoryHook<T extends object> {
     history: T[]
     writeHistory: (state: T) => void
-    undo: () => T | undefined
+    previous: () => T | undefined
     canUndo: boolean
 }
 
-export function useHistory<T>(): HistoryHook<T> {
+export function useHistory<T extends object>(): HistoryHook<T> {
     const [history, setHistory] = useState<T[]>([])
 
     function writeHistory(state: T) {
         setHistory(prev => [...prev, deepClone(state)])
     }
 
-    function undo(): T | undefined {
+    function previous(): T | undefined {
         if (history.length === 0) return undefined
 
         // For multiple items in history, return the second-to-last item
         // For a single item, return that item
-        const previousState = history.length > 1
-            ? deepClone(history[history.length - 2])
-            : deepClone(history[0])
+        const previousState = history.length > 1 ? deepClone(history[history.length - 2]) : deepClone(history[0])
 
         // Update the history:
         // - If we have 3+ items, remove the last two items
@@ -44,7 +42,7 @@ export function useHistory<T>(): HistoryHook<T> {
     return {
         history,
         writeHistory,
-        undo,
-        canUndo: history.length > 0
+        previous,
+        canUndo: history.length > 0,
     }
 }
