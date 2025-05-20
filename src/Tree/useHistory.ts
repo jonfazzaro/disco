@@ -1,5 +1,10 @@
+interface HistoryHook {
+    undo: () => void
+    history: any[]
+}
+
 export function useHistory() {
-    return {
+    return <HistoryHook>{
         undo: () => {},
         history: [],
     }
