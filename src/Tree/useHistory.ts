@@ -9,9 +9,13 @@ export interface HistoryHook {
 export function useHistory() {
     const [history, setHistory] = useState<object[]>([])
     return <HistoryHook>{
-        undo: () => {},
+        undo,
         track,
         history,
+    }
+
+    function undo() {
+        setHistory(h => h.slice(0, -1))
     }
 
     function track(value: object) {
