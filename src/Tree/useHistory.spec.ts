@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 import { useHistory } from './useHistory.ts'
 
 describe('The history hook', () => {
@@ -13,7 +13,9 @@ describe('The history hook', () => {
     describe('when changing the object', () => {
         it('has the last version in history', () => {
             const { result } = renderHook(useHistory)
-            result.current.track({ title: 'my_title' })
+            act(() => {
+                result.current.track({ title: 'my_title' })
+            })
             expect(result.current.history).toEqual([{ title: 'my_title' }])
         })
     })
