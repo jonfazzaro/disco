@@ -10,6 +10,13 @@ describe('The history hook', () => {
         })
     })
 
+    describe('when changing the object', () => {
+        it('has the last version in history', () => {
+            const { result } = renderHook(useHistory)
+            result.current.track({ title: 'my_title' })
+            expect(result.current.history).toEqual([{ title: 'my_title' }])
+        })
+    })
     // when changing the object then the last version is in the history
     // when changing the object again...
 })
