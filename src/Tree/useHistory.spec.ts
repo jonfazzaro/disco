@@ -18,6 +18,15 @@ describe('The history hook', () => {
             })
             expect(result.current.history).toEqual([{ title: 'my_title' }])
         })
+
+        it('multiple changes are stored in history', () => {
+            const { result } = renderHook(useHistory)
+            act(() => {
+                result.current.track({ title: 'my_first_title' })
+                result.current.track({ title: 'my_second_title' })
+            })
+            expect(result.current.history).toEqual([{ title: 'my_first_title' }, { title: 'my_second_title' }])
+        })
     })
     // when changing the object then the last version is in the history
     // when changing the object again...
