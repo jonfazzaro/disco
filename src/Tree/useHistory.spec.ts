@@ -36,6 +36,17 @@ describe('The history hook', () => {
                 })
                 expect(result.current.history).toEqual([first, second])
             })
+
+            it('when undoing the most recent change is removed', () => {
+                const first = { title: 'my_first_title' }
+                const second = { title: 'my_second_title' }
+                act(() => {
+                    result.current.track(first)
+                    result.current.track(second)
+                    result.current.undo()
+                })
+                expect(result.current.history).toEqual([first])
+            })
         })
     })
     // when changing the object then the last version is in the history
