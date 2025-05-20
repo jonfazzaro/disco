@@ -2,16 +2,16 @@ import { useState } from 'react'
 
 interface HistoryHook {
     undo: () => void
-    track: (data: any) => void
-    history: any[]
+    track: (data: object) => void
+    history: object[]
 }
 
 export function useHistory() {
-    const [history, setHistory] = useState<object>([])
+    const [history, setHistory] = useState<object[]>([])
     return <HistoryHook>{
         undo: () => {},
-        track: () => {
-            setHistory([{ title: 'my_title' }])
+        track: (value: object) => {
+            setHistory(h => [...h, value])
         },
         history,
     }
