@@ -10,9 +10,11 @@ export function useHistory() {
     const [history, setHistory] = useState<object[]>([])
     return <HistoryHook>{
         undo: () => {},
-        track: (value: object) => {
-            setHistory(h => [...h, value])
-        },
+        track,
         history,
+    }
+
+    function track(value: object) {
+        setHistory(h => [...h, value])
     }
 }
