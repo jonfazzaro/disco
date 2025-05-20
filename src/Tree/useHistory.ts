@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-interface HistoryHook {
+export interface HistoryHook {
     undo: () => void
     track: (data: object) => void
     history: object[]
