@@ -1,3 +1,6 @@
 export function useHistory() {
-    return null
+    return {
+        undo: () => {},
+        history: [],
+    }
 }
