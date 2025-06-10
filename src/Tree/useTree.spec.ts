@@ -180,37 +180,41 @@ describe('The tree hook', () => {
                 forest = FirebaseRealtimeForest.createNull(database)
             })
 
-            it('restores the previous state', async () => {
-                // Arrange - render the hook
-                hook = renderHook(() => useTree(forest))
-                await hookLoaded()
+            describe('when a leaf is changed', () => {
+                beforeEach(async () => {
+                    // Arrange - render the hook
+                    hook = renderHook(() => useTree(forest))
+                    await hookLoaded()
 
-                // Act - change a leaf
-                act(() => {
-                    model(hook).changeLeaf('child456', (leaf: Leaf) => {
-                        leaf.name = 'Updated Child'
-                        leaf.status = Status.doing
+                    // Act - change a leaf
+                    act(() => {
+                        model(hook).changeLeaf('child456', (leaf: Leaf) => {
+                            leaf.name = 'Updated Child'
+                            leaf.status = Status.doing
+                        })
                     })
                 })
 
-                // Verify the change was made
-                expect(model(hook).data.children?.[0].name).toBe('Updated Child')
-                expect(model(hook).data.children?.[0].attributes?.status).toBe('doing')
-
-                // Act - undo the change
-                act(() => {
-                    // Simulate pressing Ctrl+Z
-                    const ctrlZEvent = new KeyboardEvent('keydown', { key: 'z', ctrlKey: true })
-                    document.dispatchEvent(ctrlZEvent)
+                it('should update the leaf in the tree', () => {
+                    expect(model(hook).data.children?.[0].name).toBe('Updated Child')
+                    expect(model(hook).data.children?.[0].attributes?.status).toBe('doing')
                 })
 
-                // Assert - verify the tree was restored to its previous state
-                expect(model(hook).data.children?.[0].name).toBe('Child Node')
-                expect(model(hook).data.children?.[0].attributes?.status).toBe('new')
+                describe('when pressing Ctrl+Z', () => {
+                    beforeEach(() => {
+                        pressCtrlZ()
+                    })
 
-                // Verify the restored tree was saved
-                expect(database.lastSavedData.children[0].name).toBe('Child Node')
-                expect(database.lastSavedData.children[0].status).toBe('new')
+                    it('should restore the leaf to its previous state', () => {
+                        expect(model(hook).data.children?.[0].name).toBe('Child Node')
+                        expect(model(hook).data.children?.[0].attributes?.status).toBe('new')
+                    })
+
+                    it('should save the restored tree', () => {
+                        expect(database.lastSavedData.children[0].name).toBe('Child Node')
+                        expect(database.lastSavedData.children[0].status).toBe('new')
+                    })
+                })
             })
         })
 
@@ -246,49 +250,67 @@ describe('The tree hook', () => {
                 forest = FirebaseRealtimeForest.createNull(database)
             })
 
-            it('restores the previous state', async () => {
-                // Arrange - render the hook
-                hook = renderHook(() => useTree(forest))
-                await hookLoaded()
+            describe('when a deeply nested leaf is changed', () => {
+                let feature1: any
+                let task1: any
+                let subtask1: any
 
-                // Act - change a deeply nested leaf
-                act(() => {
-                    model(hook).changeLeaf('subtask1', (leaf: Leaf) => {
-                        leaf.name = 'Updated Subtask'
-                        leaf.status = Status.doing
+                beforeEach(async () => {
+                    // Arrange - render the hook
+                    hook = renderHook(() => useTree(forest))
+                    await hookLoaded()
+
+                    // Act - change a deeply nested leaf
+                    act(() => {
+                        model(hook).changeLeaf('subtask1', (leaf: Leaf) => {
+                            leaf.name = 'Updated Subtask'
+                            leaf.status = Status.doing
+                        })
+                    })
+
+                    // Get references to the nodes
+                    feature1 = model(hook).data.children?.[0]
+                    task1 = feature1?.children?.[0]
+                    subtask1 = task1?.children?.[0]
+                })
+
+                it('should update the leaf in the tree', () => {
+                    expect(subtask1?.name).toBe('Updated Subtask')
+                    expect(subtask1?.attributes?.status).toBe('doing')
+                })
+
+                describe('when pressing Ctrl+Z', () => {
+                    let restoredFeature1: any
+                    let restoredTask1: any
+                    let restoredSubtask1: any
+                    let savedFeature1: any
+                    let savedTask1: any
+                    let savedSubtask1: any
+
+                    beforeEach(() => {
+                        pressCtrlZ()
+
+                        // Get references to the restored nodes
+                        restoredFeature1 = model(hook).data.children?.[0]
+                        restoredTask1 = restoredFeature1?.children?.[0]
+                        restoredSubtask1 = restoredTask1?.children?.[0]
+
+                        // Get references to the saved nodes
+                        savedFeature1 = database.lastSavedData.children[0]
+                        savedTask1 = savedFeature1.children[0]
+                        savedSubtask1 = savedTask1.children[0]
+                    })
+
+                    it('should restore the leaf to its previous state', () => {
+                        expect(restoredSubtask1?.name).toBe('Subtask 1')
+                        expect(restoredSubtask1?.attributes?.status).toBe('new')
+                    })
+
+                    it('should save the restored tree', () => {
+                        expect(savedSubtask1.name).toBe('Subtask 1')
+                        expect(savedSubtask1.status).toBe('new')
                     })
                 })
-
-                // Verify the change was made
-                const feature1 = model(hook).data.children?.[0]
-                const task1 = feature1?.children?.[0]
-                const subtask1 = task1?.children?.[0]
-
-                expect(subtask1?.name).toBe('Updated Subtask')
-                expect(subtask1?.attributes?.status).toBe('doing')
-
-                // Act - undo the change
-                act(() => {
-                    // Simulate pressing Ctrl+Z
-                    const ctrlZEvent = new KeyboardEvent('keydown', { key: 'z', ctrlKey: true })
-                    document.dispatchEvent(ctrlZEvent)
-                })
-
-                // Assert - verify the tree was restored to its previous state
-                const restoredFeature1 = model(hook).data.children?.[0]
-                const restoredTask1 = restoredFeature1?.children?.[0]
-                const restoredSubtask1 = restoredTask1?.children?.[0]
-
-                expect(restoredSubtask1?.name).toBe('Subtask 1')
-                expect(restoredSubtask1?.attributes?.status).toBe('new')
-
-                // Verify the restored tree was saved
-                const savedFeature1 = database.lastSavedData.children[0]
-                const savedTask1 = savedFeature1.children[0]
-                const savedSubtask1 = savedTask1.children[0]
-
-                expect(savedSubtask1.name).toBe('Subtask 1')
-                expect(savedSubtask1.status).toBe('new')
             })
         })
     })
