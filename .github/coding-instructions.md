@@ -127,7 +127,7 @@
 - Apply Given-When-Then structure to all specifications.
 - Keep specification setup code DRY but explicit.
 - Create separate specification classes for separate concerns.
-- There should only be one execution (act) per specification.
+- There should only be one execution (act) per specification. 
 - Focus on public interfaces rather than implementation details.
 - Specify unhappy paths and edge cases, not just the happy path.
 - Maintain one logical expectation per specification to clarify failures.

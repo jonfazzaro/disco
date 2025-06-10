@@ -121,6 +121,35 @@ describe('The tree hook', () => {
                         ]),
                     )
                 })
+
+                describe('and then pressing Ctrl+Z', () => {
+                    beforeEach(() => {
+                        pressCtrlZ()
+                    })
+
+                    it('restores the previous state', () => {
+                        expect(model(hook).data.children).toEqual(
+                            expect.arrayContaining([
+                                expect.objectContaining({
+                                    name: 'Child Node',
+                                    attributes: { id: 'child456', status: 'new' },
+                                    children: [],
+                                }),
+                            ]),
+                        )
+                    })
+
+                    it('saves the restored tree', () => {
+                        expect(database.lastSavedData.children).toEqual(
+                            expect.arrayContaining([
+                                expect.objectContaining({
+                                    name: 'Child Node',
+                                    status: Status.new,
+                                }),
+                            ]),
+                        )
+                    })
+                })
             })
         })
 
@@ -143,6 +172,117 @@ describe('The tree hook', () => {
         })
     })
 
+    describe('when undoing', () => {
+        describe('given a simple tree structure', () => {
+            beforeEach(() => {
+                arrangeSimpleTree()
+                setupDatabaseAndForest()
+            })
+
+            describe('when a leaf is changed', () => {
+                beforeEach(async () => {
+                    renderTreeHook()
+                    await hookLoaded()
+                    changeLeaf('child456', 'Updated Child', Status.doing)
+                })
+
+                it('should update the leaf in the tree', () => {
+                    expect(model(hook).data.children?.[0].name).toBe('Updated Child')
+                    expect(model(hook).data.children?.[0].attributes?.status).toBe('doing')
+                })
+
+                describe('when pressing Ctrl+Z', () => {
+                    beforeEach(() => {
+                        pressCtrlZ()
+                    })
+
+                    it('should restore the leaf to its previous state', () => {
+                        expect(model(hook).data.children?.[0].name).toBe('Child Node')
+                        expect(model(hook).data.children?.[0].attributes?.status).toBe('new')
+                    })
+
+                    it('should save the restored tree', () => {
+                        expect(database.lastSavedData.children[0].name).toBe('Child Node')
+                        expect(database.lastSavedData.children[0].status).toBe('new')
+                    })
+                })
+            })
+        })
+
+        describe('given a complex tree structure', () => {
+            beforeEach(() => {
+                arrangeComplexTree()
+                setupDatabaseAndForest()
+            })
+
+            describe('when a deeply nested leaf is changed', () => {
+                let feature1: any
+                let task1: any
+                let subtask1: any
+
+                beforeEach(async () => {
+                    renderTreeHook()
+                    await hookLoaded()
+                    changeLeaf('subtask1', 'Updated Subtask', Status.doing)
+
+                    const references = getNodeReferences();
+                    feature1 = references.feature1;
+                    task1 = references.task1;
+                    subtask1 = references.subtask1;
+                })
+
+                it('should update the leaf in the tree', () => {
+                    expect(subtask1?.name).toBe('Updated Subtask')
+                    expect(subtask1?.attributes?.status).toBe('doing')
+                })
+
+                describe('when pressing Ctrl+Z', () => {
+                    let restoredFeature1: any
+                    let restoredTask1: any
+                    let restoredSubtask1: any
+                    let savedFeature1: any
+                    let savedTask1: any
+                    let savedSubtask1: any
+
+                    beforeEach(() => {
+                        pressCtrlZ()
+
+                        const restoredReferences = getRestoredNodeReferences();
+                        restoredFeature1 = restoredReferences.restoredFeature1;
+                        restoredTask1 = restoredReferences.restoredTask1;
+                        restoredSubtask1 = restoredReferences.restoredSubtask1;
+
+                        const savedReferences = getSavedNodeReferences();
+                        savedFeature1 = savedReferences.savedFeature1;
+                        savedTask1 = savedReferences.savedTask1;
+                        savedSubtask1 = savedReferences.savedSubtask1;
+                    })
+
+                    it('should restore the leaf to its previous state', () => {
+                        expect(restoredSubtask1?.name).toBe('Subtask 1')
+                        expect(restoredSubtask1?.attributes?.status).toBe('new')
+                    })
+
+                    it('should save the restored tree', () => {
+                        expect(savedSubtask1.name).toBe('Subtask 1')
+                        expect(savedSubtask1.status).toBe('new')
+                    })
+                })
+            })
+        })
+    })
+
+    function arrangeSimpleTree() {
+        const rootNode = Leaf.create({ name: 'Root Node', id: 'root123' })
+        Leaf.create({ name: 'Child Node', parent: rootNode, status: Status.new, id: 'child456' })
+        rootNode.status = Status.doing
+        tree = rootNode
+    }
+
+    async function hookLoaded() {
+        await act(async () => {})
+    }
+
     function arrangeTree() {
         const rootNode = Leaf.create({ name: 'Root Node', id: 'root123' })
 
@@ -152,10 +292,80 @@ describe('The tree hook', () => {
         tree = rootNode
     }
 
+    function renderTreeHook() {
+        hook = renderHook(() => useTree(forest))
+        return hook
+    }
+
+    function changeLeaf(id: string, newName: string, newStatus: Status) {
+        act(() => {
+            model(hook).changeLeaf(id, (leaf: Leaf) => {
+                leaf.name = newName
+                leaf.status = newStatus
+            })
+        })
+    }
+
+    function arrangeComplexTree() {
+        const rootNode = Leaf.create({ name: 'Project', id: 'project1' })
+
+        const feature1 = Leaf.create({
+            name: 'Feature 1',
+            parent: rootNode,
+            status: Status.doing,
+            id: 'feature1',
+        })
+        const task1 = Leaf.create({ name: 'Task 1', parent: feature1, status: Status.new, id: 'task1' })
+        Leaf.create({ name: 'Subtask 1', parent: task1, status: Status.new, id: 'subtask1' })
+
+        const feature2 = Leaf.create({
+            name: 'Feature 2',
+            parent: rootNode,
+            status: Status.new,
+            id: 'feature2',
+        })
+        Leaf.create({ name: 'Task 2', parent: feature2, status: Status.new, id: 'task2' })
+
+        tree = rootNode
+    }
+
+    function setupDatabaseAndForest() {
+        database = new NullRealtimeDatabase(tree)
+        forest = FirebaseRealtimeForest.createNull(database)
+    }
+
+    function getNodeReferences() {
+        const feature1 = model(hook).data.children?.[0]
+        const task1 = feature1?.children?.[0]
+        const subtask1 = task1?.children?.[0]
+        return { feature1, task1, subtask1 }
+    }
+
+    function getRestoredNodeReferences() {
+        const restoredFeature1 = model(hook).data.children?.[0]
+        const restoredTask1 = restoredFeature1?.children?.[0]
+        const restoredSubtask1 = restoredTask1?.children?.[0]
+        return { restoredFeature1, restoredTask1, restoredSubtask1 }
+    }
+
+    function getSavedNodeReferences() {
+        const savedFeature1 = database.lastSavedData.children[0]
+        const savedTask1 = savedFeature1.children[0]
+        const savedSubtask1 = savedTask1.children[0]
+        return { savedFeature1, savedTask1, savedSubtask1 }
+    }
+
     function pressEsc() {
         act(() => {
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' })
             document.dispatchEvent(escapeEvent)
+        })
+    }
+
+    function pressCtrlZ() {
+        act(() => {
+            const ctrlZEvent = new KeyboardEvent('keydown', { key: 'z', ctrlKey: true })
+            document.dispatchEvent(ctrlZEvent)
         })
     }
 
