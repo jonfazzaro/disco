@@ -174,42 +174,28 @@ describe('The tree hook', () => {
 
     describe('when undoing', () => {
         describe('given a simple tree structure', () => {
-            let tree: Leaf
-            let database: NullRealtimeDatabase
-            let forest: FirebaseRealtimeForest
-
             beforeEach(() => {
-                // Arrange a simple tree with a root node and a child node
-                const rootNode = Leaf.create({ name: 'Root Node', id: 'root123' })
-                Leaf.create({ name: 'Child Node', parent: rootNode, status: Status.new, id: 'child456' })
-                rootNode.status = Status.doing
-                tree = rootNode
-
-                // Set up the database and forest
+                arrangeSimpleTree()
                 database = new NullRealtimeDatabase(tree)
                 forest = FirebaseRealtimeForest.createNull(database)
             })
 
             it('restores the previous state', async () => {
                 // Arrange - render the hook
-                const { result } = renderHook(() => useTree(forest))
-
-                // Wait for the tree to load
-                await act(async () => {
-                    // This is just to wait for the useEffect to complete
-                })
+                hook = renderHook(() => useTree(forest))
+                await hookLoaded()
 
                 // Act - change a leaf
                 act(() => {
-                    result.current.changeLeaf('child456', (leaf: Leaf) => {
+                    model(hook).changeLeaf('child456', (leaf: Leaf) => {
                         leaf.name = 'Updated Child'
                         leaf.status = Status.doing
                     })
                 })
 
                 // Verify the change was made
-                expect(result.current.data.children?.[0].name).toBe('Updated Child')
-                expect(result.current.data.children?.[0].attributes?.status).toBe('doing')
+                expect(model(hook).data.children?.[0].name).toBe('Updated Child')
+                expect(model(hook).data.children?.[0].attributes?.status).toBe('doing')
 
                 // Act - undo the change
                 act(() => {
@@ -219,8 +205,8 @@ describe('The tree hook', () => {
                 })
 
                 // Assert - verify the tree was restored to its previous state
-                expect(result.current.data.children?.[0].name).toBe('Child Node')
-                expect(result.current.data.children?.[0].attributes?.status).toBe('new')
+                expect(model(hook).data.children?.[0].name).toBe('Child Node')
+                expect(model(hook).data.children?.[0].attributes?.status).toBe('new')
 
                 // Verify the restored tree was saved
                 expect(database.lastSavedData.children[0].name).toBe('Child Node')
@@ -229,7 +215,6 @@ describe('The tree hook', () => {
         })
 
         describe('given a complex tree structure', () => {
-            let tree: Leaf
             let database: NullRealtimeDatabase
             let forest: FirebaseRealtimeForest
 
@@ -263,23 +248,19 @@ describe('The tree hook', () => {
 
             it('restores the previous state', async () => {
                 // Arrange - render the hook
-                const { result } = renderHook(() => useTree(forest))
-
-                // Wait for the tree to load
-                await act(async () => {
-                    // This is just to wait for the useEffect to complete
-                })
+                hook = renderHook(() => useTree(forest))
+                await hookLoaded()
 
                 // Act - change a deeply nested leaf
                 act(() => {
-                    result.current.changeLeaf('subtask1', (leaf: Leaf) => {
+                    model(hook).changeLeaf('subtask1', (leaf: Leaf) => {
                         leaf.name = 'Updated Subtask'
                         leaf.status = Status.doing
                     })
                 })
 
                 // Verify the change was made
-                const feature1 = result.current.data.children?.[0]
+                const feature1 = model(hook).data.children?.[0]
                 const task1 = feature1?.children?.[0]
                 const subtask1 = task1?.children?.[0]
 
@@ -294,7 +275,7 @@ describe('The tree hook', () => {
                 })
 
                 // Assert - verify the tree was restored to its previous state
-                const restoredFeature1 = result.current.data.children?.[0]
+                const restoredFeature1 = model(hook).data.children?.[0]
                 const restoredTask1 = restoredFeature1?.children?.[0]
                 const restoredSubtask1 = restoredTask1?.children?.[0]
 
@@ -311,6 +292,17 @@ describe('The tree hook', () => {
             })
         })
     })
+
+    function arrangeSimpleTree() {
+        const rootNode = Leaf.create({ name: 'Root Node', id: 'root123' })
+        Leaf.create({ name: 'Child Node', parent: rootNode, status: Status.new, id: 'child456' })
+        rootNode.status = Status.doing
+        tree = rootNode
+    }
+
+    async function hookLoaded() {
+        await act(async () => {})
+    }
 
     function arrangeTree() {
         const rootNode = Leaf.create({ name: 'Root Node', id: 'root123' })
