@@ -225,10 +225,9 @@ describe('The tree hook', () => {
                     await hookLoaded()
                     changeLeaf('subtask1', 'Updated Subtask', Status.doing)
 
-                    const references = getNodeReferences();
-                    feature1 = references.feature1;
-                    task1 = references.task1;
-                    subtask1 = references.subtask1;
+                    feature1 = model(hook).data.children?.[0]
+                    task1 = feature1?.children?.[0]
+                    subtask1 = task1?.children?.[0]
                 })
 
                 it('should update the leaf in the tree', () => {
@@ -237,33 +236,22 @@ describe('The tree hook', () => {
                 })
 
                 describe('when pressing Ctrl+Z', () => {
-                    let restoredFeature1: any
-                    let restoredTask1: any
-                    let restoredSubtask1: any
-                    let savedFeature1: any
-                    let savedTask1: any
-                    let savedSubtask1: any
-
                     beforeEach(() => {
                         pressCtrlZ()
-
-                        const restoredReferences = getRestoredNodeReferences();
-                        restoredFeature1 = restoredReferences.restoredFeature1;
-                        restoredTask1 = restoredReferences.restoredTask1;
-                        restoredSubtask1 = restoredReferences.restoredSubtask1;
-
-                        const savedReferences = getSavedNodeReferences();
-                        savedFeature1 = savedReferences.savedFeature1;
-                        savedTask1 = savedReferences.savedTask1;
-                        savedSubtask1 = savedReferences.savedSubtask1;
                     })
 
                     it('should restore the leaf to its previous state', () => {
+                        const restoredFeature1 = model(hook).data.children?.[0]
+                        const restoredTask1 = restoredFeature1?.children?.[0]
+                        const restoredSubtask1 = restoredTask1?.children?.[0]
                         expect(restoredSubtask1?.name).toBe('Subtask 1')
                         expect(restoredSubtask1?.attributes?.status).toBe('new')
                     })
 
                     it('should save the restored tree', () => {
+                        const savedFeature1 = database.lastSavedData.children[0]
+                        const savedTask1 = savedFeature1.children[0]
+                        const savedSubtask1 = savedTask1.children[0]
                         expect(savedSubtask1.name).toBe('Subtask 1')
                         expect(savedSubtask1.status).toBe('new')
                     })
@@ -332,27 +320,6 @@ describe('The tree hook', () => {
     function setupDatabaseAndForest() {
         database = new NullRealtimeDatabase(tree)
         forest = FirebaseRealtimeForest.createNull(database)
-    }
-
-    function getNodeReferences() {
-        const feature1 = model(hook).data.children?.[0]
-        const task1 = feature1?.children?.[0]
-        const subtask1 = task1?.children?.[0]
-        return { feature1, task1, subtask1 }
-    }
-
-    function getRestoredNodeReferences() {
-        const restoredFeature1 = model(hook).data.children?.[0]
-        const restoredTask1 = restoredFeature1?.children?.[0]
-        const restoredSubtask1 = restoredTask1?.children?.[0]
-        return { restoredFeature1, restoredTask1, restoredSubtask1 }
-    }
-
-    function getSavedNodeReferences() {
-        const savedFeature1 = database.lastSavedData.children[0]
-        const savedTask1 = savedFeature1.children[0]
-        const savedSubtask1 = savedTask1.children[0]
-        return { savedFeature1, savedTask1, savedSubtask1 }
     }
 
     function pressEsc() {
