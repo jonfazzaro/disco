@@ -95,7 +95,7 @@
 - Use seams to isolate hard-to-specify code during refactoring.
 
 ## Executable Specifications
-- Create specifications BEFORE implementing any new feature or modification. 
+- Create specifications BEFORE implementing any new feature or modification.
   - You may also know this approach as Test-Driven Development, or TDD.
   - I don't want the resulting code to use the terminology of testing, though--this is specification, conceptually.
 - Create a failing specification before implementing functionality.
