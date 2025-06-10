@@ -176,23 +176,14 @@ describe('The tree hook', () => {
         describe('given a simple tree structure', () => {
             beforeEach(() => {
                 arrangeSimpleTree()
-                database = new NullRealtimeDatabase(tree)
-                forest = FirebaseRealtimeForest.createNull(database)
+                setupDatabaseAndForest()
             })
 
             describe('when a leaf is changed', () => {
                 beforeEach(async () => {
-                    // Arrange - render the hook
-                    hook = renderHook(() => useTree(forest))
+                    renderTreeHook()
                     await hookLoaded()
-
-                    // Act - change a leaf
-                    act(() => {
-                        model(hook).changeLeaf('child456', (leaf: Leaf) => {
-                            leaf.name = 'Updated Child'
-                            leaf.status = Status.doing
-                        })
-                    })
+                    changeLeaf('child456', 'Updated Child', Status.doing)
                 })
 
                 it('should update the leaf in the tree', () => {
@@ -219,35 +210,9 @@ describe('The tree hook', () => {
         })
 
         describe('given a complex tree structure', () => {
-            let database: NullRealtimeDatabase
-            let forest: FirebaseRealtimeForest
-
             beforeEach(() => {
-                // Arrange a more complex tree with multiple levels
-                const rootNode = Leaf.create({ name: 'Project', id: 'project1' })
-
-                const feature1 = Leaf.create({
-                    name: 'Feature 1',
-                    parent: rootNode,
-                    status: Status.doing,
-                    id: 'feature1',
-                })
-                const task1 = Leaf.create({ name: 'Task 1', parent: feature1, status: Status.new, id: 'task1' })
-                Leaf.create({ name: 'Subtask 1', parent: task1, status: Status.new, id: 'subtask1' })
-
-                const feature2 = Leaf.create({
-                    name: 'Feature 2',
-                    parent: rootNode,
-                    status: Status.new,
-                    id: 'feature2',
-                })
-                Leaf.create({ name: 'Task 2', parent: feature2, status: Status.new, id: 'task2' })
-
-                tree = rootNode
-
-                // Set up the database and forest
-                database = new NullRealtimeDatabase(tree)
-                forest = FirebaseRealtimeForest.createNull(database)
+                arrangeComplexTree()
+                setupDatabaseAndForest()
             })
 
             describe('when a deeply nested leaf is changed', () => {
@@ -256,22 +221,14 @@ describe('The tree hook', () => {
                 let subtask1: any
 
                 beforeEach(async () => {
-                    // Arrange - render the hook
-                    hook = renderHook(() => useTree(forest))
+                    renderTreeHook()
                     await hookLoaded()
+                    changeLeaf('subtask1', 'Updated Subtask', Status.doing)
 
-                    // Act - change a deeply nested leaf
-                    act(() => {
-                        model(hook).changeLeaf('subtask1', (leaf: Leaf) => {
-                            leaf.name = 'Updated Subtask'
-                            leaf.status = Status.doing
-                        })
-                    })
-
-                    // Get references to the nodes
-                    feature1 = model(hook).data.children?.[0]
-                    task1 = feature1?.children?.[0]
-                    subtask1 = task1?.children?.[0]
+                    const references = getNodeReferences();
+                    feature1 = references.feature1;
+                    task1 = references.task1;
+                    subtask1 = references.subtask1;
                 })
 
                 it('should update the leaf in the tree', () => {
@@ -290,15 +247,15 @@ describe('The tree hook', () => {
                     beforeEach(() => {
                         pressCtrlZ()
 
-                        // Get references to the restored nodes
-                        restoredFeature1 = model(hook).data.children?.[0]
-                        restoredTask1 = restoredFeature1?.children?.[0]
-                        restoredSubtask1 = restoredTask1?.children?.[0]
+                        const restoredReferences = getRestoredNodeReferences();
+                        restoredFeature1 = restoredReferences.restoredFeature1;
+                        restoredTask1 = restoredReferences.restoredTask1;
+                        restoredSubtask1 = restoredReferences.restoredSubtask1;
 
-                        // Get references to the saved nodes
-                        savedFeature1 = database.lastSavedData.children[0]
-                        savedTask1 = savedFeature1.children[0]
-                        savedSubtask1 = savedTask1.children[0]
+                        const savedReferences = getSavedNodeReferences();
+                        savedFeature1 = savedReferences.savedFeature1;
+                        savedTask1 = savedReferences.savedTask1;
+                        savedSubtask1 = savedReferences.savedSubtask1;
                     })
 
                     it('should restore the leaf to its previous state', () => {
@@ -333,6 +290,69 @@ describe('The tree hook', () => {
 
         rootNode.status = Status.doing
         tree = rootNode
+    }
+
+    function renderTreeHook() {
+        hook = renderHook(() => useTree(forest))
+        return hook
+    }
+
+    function changeLeaf(id: string, newName: string, newStatus: Status) {
+        act(() => {
+            model(hook).changeLeaf(id, (leaf: Leaf) => {
+                leaf.name = newName
+                leaf.status = newStatus
+            })
+        })
+    }
+
+    function arrangeComplexTree() {
+        const rootNode = Leaf.create({ name: 'Project', id: 'project1' })
+
+        const feature1 = Leaf.create({
+            name: 'Feature 1',
+            parent: rootNode,
+            status: Status.doing,
+            id: 'feature1',
+        })
+        const task1 = Leaf.create({ name: 'Task 1', parent: feature1, status: Status.new, id: 'task1' })
+        Leaf.create({ name: 'Subtask 1', parent: task1, status: Status.new, id: 'subtask1' })
+
+        const feature2 = Leaf.create({
+            name: 'Feature 2',
+            parent: rootNode,
+            status: Status.new,
+            id: 'feature2',
+        })
+        Leaf.create({ name: 'Task 2', parent: feature2, status: Status.new, id: 'task2' })
+
+        tree = rootNode
+    }
+
+    function setupDatabaseAndForest() {
+        database = new NullRealtimeDatabase(tree)
+        forest = FirebaseRealtimeForest.createNull(database)
+    }
+
+    function getNodeReferences() {
+        const feature1 = model(hook).data.children?.[0]
+        const task1 = feature1?.children?.[0]
+        const subtask1 = task1?.children?.[0]
+        return { feature1, task1, subtask1 }
+    }
+
+    function getRestoredNodeReferences() {
+        const restoredFeature1 = model(hook).data.children?.[0]
+        const restoredTask1 = restoredFeature1?.children?.[0]
+        const restoredSubtask1 = restoredTask1?.children?.[0]
+        return { restoredFeature1, restoredTask1, restoredSubtask1 }
+    }
+
+    function getSavedNodeReferences() {
+        const savedFeature1 = database.lastSavedData.children[0]
+        const savedTask1 = savedFeature1.children[0]
+        const savedSubtask1 = savedTask1.children[0]
+        return { savedFeature1, savedTask1, savedSubtask1 }
     }
 
     function pressEsc() {
