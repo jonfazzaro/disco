@@ -28,23 +28,9 @@ describe('The toolbar', () => {
     })
 
     describe('when deleting a leaf', () => {
-        it('prompts the user for confirmation', () => {
-            model(hook).deleteLeaf()
-            expect(lastConfirmMessage).toEqual('Delete Leaf: Are you sure?')
-        })
-
-        describe('given the user cancels', () => {
-            it('does not delete the leaf', () => {
-                deleteLeaf(false)
-                expect(tree.status).not.toEqual(Status.canceled)
-            })
-        })
-
-        describe('given the user confirms', () => {
-            it('deletes the leaf', () => {
-                deleteLeaf(true)
-                expect(tree.status).toEqual(Status.canceled)
-            })
+        it('deletes the leaf', () => {
+            deleteLeaf(true)
+            expect(tree.status).toEqual(Status.canceled)
         })
     })
 
@@ -52,11 +38,10 @@ describe('The toolbar', () => {
     let tree: Leaf
     let lastChangedId: string | null
     let lastChangeCallback: ((leaf: Leaf) => void) | null
-    let lastConfirmMessage: string | null
     let confirmResult: boolean
 
     function arrangeHook() {
-        hook = renderHook(() => useToolbar({ node, changeLeaf: changeLeafFn, isSelected: false }, fakeConfirmFn))
+        hook = renderHook(() => useToolbar({ node, changeLeaf: changeLeafFn, isSelected: false }))
     }
 
     function deleteLeaf(promptResponse: boolean) {
@@ -85,7 +70,6 @@ describe('The toolbar', () => {
     function arrangeCallbackTools() {
         lastChangedId = null
         lastChangeCallback = null
-        lastConfirmMessage = null
         confirmResult = false
     }
 
@@ -96,11 +80,6 @@ describe('The toolbar', () => {
     function changeLeafFn(id: string, callback: (leaf: any) => void) {
         lastChangedId = id
         lastChangeCallback = callback
-    }
-
-    function fakeConfirmFn(message: string) {
-        lastConfirmMessage = message
-        return confirmResult
     }
 
     const node = {

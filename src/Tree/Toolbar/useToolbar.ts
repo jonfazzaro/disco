@@ -4,7 +4,6 @@ import { id } from '../node.ts'
 
 export function useToolbar(
     { node, changeLeaf }: CardProps,
-    confirmPrompt: (message: string) => boolean = window.confirm,
 ) {
     return {
         addChild,
@@ -22,7 +21,7 @@ export function useToolbar(
     }
 
     function deleteLeaf() {
-        if (confirmPrompt('Delete Leaf: Are you sure?')) changeLeaf(id(node), leaf => leaf.delete())
+        changeLeaf(id(node), leaf => leaf.delete())
     }
 
     function changeStatus(status: Status) {
