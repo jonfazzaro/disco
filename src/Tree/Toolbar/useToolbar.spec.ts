@@ -29,7 +29,7 @@ describe('The toolbar', () => {
 
     describe('when deleting a leaf', () => {
         it('deletes the leaf', () => {
-            deleteLeaf(true)
+            deleteLeaf()
             expect(tree.status).toEqual(Status.canceled)
         })
     })
@@ -38,14 +38,12 @@ describe('The toolbar', () => {
     let tree: Leaf
     let lastChangedId: string | null
     let lastChangeCallback: ((leaf: Leaf) => void) | null
-    let confirmResult: boolean
 
     function arrangeHook() {
         hook = renderHook(() => useToolbar({ node, changeLeaf: changeLeafFn, isSelected: false }))
     }
 
-    function deleteLeaf(promptResponse: boolean) {
-        confirmResult = promptResponse
+    function deleteLeaf() {
         model(hook).deleteLeaf()
         lastChangeCallback?.(tree)
     }
@@ -70,7 +68,6 @@ describe('The toolbar', () => {
     function arrangeCallbackTools() {
         lastChangedId = null
         lastChangeCallback = null
-        confirmResult = false
     }
 
     function arrangeTree() {
