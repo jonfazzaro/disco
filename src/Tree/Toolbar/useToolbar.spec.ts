@@ -34,6 +34,13 @@ describe('The toolbar', () => {
         })
     })
 
+    // Detach/move branch
+    // Cut and Paste
+    // Cut: pick the selected card and serialize its contents to the clipboard
+    // Paste: given a selected card, deserializes the clipboard to a Leaf and attaches it as a child
+    // Paste: given no selection, replaces the whole tree
+    // Depends on an abstraction for the clipboard
+
     let hook: any
     let tree: Leaf
     let lastChangedId: string | null
