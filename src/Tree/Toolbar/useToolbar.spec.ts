@@ -89,7 +89,7 @@ describe('The toolbar', () => {
     const node = {
         name: 'Lord Mayor',
         attributes: { id: '1234567890', status: 'new' },
-        children: [],
+        children: [ {name: 'Alderman', attributes: {id: '9876543210'} } ],
         __rd3t: {
             id: '53',
             depth: 1,

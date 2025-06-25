@@ -9,6 +9,7 @@ export function useToolbar(
         addChild,
         deleteLeaf,
         changeStatus,
+        cutLeaf: () => {},
     }
 
     function addChild() {
