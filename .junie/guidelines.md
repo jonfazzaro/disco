@@ -1,1 +1,0 @@
-../.github/coding-instructions.md

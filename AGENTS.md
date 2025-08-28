@@ -1,3 +1,11 @@
+## Disco 
+- To run the specs: `npm run spec -- --run`
+- To run the app: `npm run dev`
+
+## React
+- Components should contain minimal imperative/logic code (usually the code above the statement that returns JSX). Instead, this logic should be factored out to a custom hook named the same as the component, but with the `use` prefix. For example, the presentation logic for the `ProductList` component can be found in the `useProductList` hook.
+- Components themselves do not require specs or unit tests, but their custom hooks should be governed by executable specifications per the same standards listed above.
+
 ## Design & Structure
 - Place code that changes together in the same module/class.
 - Separate code that changes for different reasons.
@@ -96,8 +104,8 @@
 
 ## Executable Specifications
 - Create specifications BEFORE implementing any new feature or modification.
-  - You may also know this approach as Test-Driven Development, or TDD.
-  - I don't want the resulting code to use the terminology of testing, though--this is specification, conceptually.
+    - You may also know this approach as Test-Driven Development, or TDD.
+    - I don't want the resulting code to use the terminology of testing, though--this is specification, conceptually.
 - Create a failing specification before implementing functionality.
 - Pass the specification with the simplest possible implementation.
 - Design the code that passed after the specification passes.
@@ -127,7 +135,7 @@
 - Apply Given-When-Then structure to all specifications.
 - Keep specification setup code DRY but explicit.
 - Create separate specification classes for separate concerns.
-- There should only be one execution (act) per specification. 
+- There should only be one execution (act) per specification.
 - Focus on public interfaces rather than implementation details.
 - Specify unhappy paths and edge cases, not just the happy path.
 - Maintain one logical expectation per specification to clarify failures.
@@ -176,12 +184,3 @@
 + Start simple. Add layers and patterns only when the need arises.
 + Favor clear, self-contained modules.
 + Ask: "Would another developer—or a future me—understand what this code is doing without reading the full call stack?"
-
-## React
-
-- Components should contain minimal imperative/logic code (usually the code above the statement that returns JSX). Instead, this logic should be factored out to a custom hook named the same as the component, but with the `use` prefix. For example, the presentation logic for the `ProductList` component can be found in the `useProductList` hook.
-- Components themselves do not require specs or unit tests, but their custom hooks should be governed by executable specifications per the same standards listed above.
-
-## Disco (this codebase)
-
-- To run the specs: `npm run spec -- --run`
