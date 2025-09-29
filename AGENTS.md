@@ -184,3 +184,5 @@
 + Start simple. Add layers and patterns only when the need arises.
 + Favor clear, self-contained modules.
 + Ask: "Would another developer—or a future me—understand what this code is doing without reading the full call stack?"
+
+Please end every one of our interactions with the emoji 🟢.
