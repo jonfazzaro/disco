@@ -37,5 +37,10 @@
         "typescript-eslint": "^8.26.1",
         "vite": "^8.2.2",
         "vitest": "^4.1.8"
+    },
+    "overrides": {
+        "react-d3-tree": {
+            "uuid": "^14.0.1"
+        }
     }
 }
